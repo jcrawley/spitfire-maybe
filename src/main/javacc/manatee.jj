@@ -109,9 +109,9 @@ Script SCRIPT(): {
     {return new Script(statements);}
 }
 
-// -----------------------------------------------------
-// STMT -> (DEC | SIMPLESTMT MODIFER? | COMPLEXSTMT) BR+
-// -----------------------------------------------------
+// ---------------------------------------------------------------------
+// STMT -> (DEC | ASSIGNMENT | PRINTSTMT | CONDITIONAL | LOOP | EXP) BR+
+// ---------------------------------------------------------------------
 
 Statement STMT(): {
     Statement s;
@@ -120,10 +120,15 @@ Statement STMT(): {
     (
         s = DEC()
     |
-        s = COMPLEXSTMT()
+        s = ASSIGNMENT()
     |
-        s = SIMPLESTMT() (m = MODIFIER())?
-        {if (m != null) s = new ModifiedStatement(m, s);}
+        s = PRINTSTMT() 
+    |
+        s = CONDITIONAL() 
+    |
+        s = LOOP() 
+    |
+        S = EXP()
     )
     ((<BR>)+ | <EOF>)
     {return s;}
