@@ -179,15 +179,15 @@ String TYPE(): {
     StringBuilder builder = new StringBuilder();
 }{
     (
-        "truth" "value" {t = "truth value";}
+        "B" {t = "boolean";}
     |
-        "character" {t = "character";}
+        "C" {t = "character";}
     |
-        "whole" "number" {t = "whole number";}
+        "S" {t = "String";}
     |
-        "number" {t = "number";}
+        "Y" {t = "any";}
     |
-        "string" {t = "string";}
+        "N" {t = "number";}
     )
     {builder.append(t);}
     (
