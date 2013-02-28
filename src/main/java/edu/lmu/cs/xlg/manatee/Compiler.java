@@ -1,18 +1,18 @@
-package edu.lmu.cs.xlg.spitfire;
+package edu.lmu.cs.xlg.manatee;
 
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Reader;
 
-import edu.lmu.cs.xlg.spitfire.entities.Script;
-import edu.lmu.cs.xlg.spitfire.entities.SymbolTable;
-import edu.lmu.cs.xlg.spitfire.generators.Generator;
-import edu.lmu.cs.xlg.spitfire.syntax.Parser;
+import edu.lmu.cs.xlg.manatee.entities.Script;
+import edu.lmu.cs.xlg.manatee.entities.SymbolTable;
+import edu.lmu.cs.xlg.manatee.generators.Generator;
+import edu.lmu.cs.xlg.manatee.syntax.Parser;
 import edu.lmu.cs.xlg.util.Log;
 
 /**
- * A compiler for spitfire.
+ * A compiler for manatee.
  *
  * <p>This class contains a static <code>main</code> method allowing you to run the compiler
  * from the command line, as well as a few methods to compile, or even run specific phases of
@@ -22,9 +22,9 @@ public class Compiler {
 
     /**
      * A logger for logging messages (both regular and error messages). The base properties file
-     * is called <code>spitfire.properties</code>.
+     * is called <code>manatee.properties</code>.
      */
-    private Log log = new Log("spitfire", new PrintWriter(System.out, true));
+    private Log log = new Log("Manatee", new PrintWriter(System.out, true));
 
     /**
      * Runs the compiler as an application.
@@ -75,7 +75,7 @@ public class Compiler {
     }
 
     /**
-     * Checks the syntax of a spitfire Script read from a given reader object.
+     * Checks the syntax of a manatee Script read from a given reader object.
      *
      * @param reader
      *     the source
@@ -94,8 +94,8 @@ public class Compiler {
     }
 
     /**
-     * Checks the static semantics of a spitfire script object, generally one already produced from
-     * a parse.  This method is useful for testing or in cases where you want to embed an spitfire
+     * Checks the static semantics of a manatee script object, generally one already produced from
+     * a parse.  This method is useful for testing or in cases where you want to embed an manatee
      * compiler in a larger application.
      *
      * @param script
@@ -110,7 +110,7 @@ public class Compiler {
     }
 
     /**
-     * Checks the syntax and static semantics of a spitfire Script from a reader.
+     * Checks the syntax and static semantics of a manatee Script from a reader.
      *
      * @param reader
      *     the source
@@ -126,7 +126,7 @@ public class Compiler {
     }
 
     /**
-     * Reads a spitfire script from the given reader and outputs a equivalent script to the
+     * Reads a manatee script from the given reader and outputs a equivalent script to the
      * given writer.
      *
      * @param reader

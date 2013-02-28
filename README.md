@@ -164,7 +164,7 @@ SYNTAX IN PROGRESS
                   |  LOOP
                   |  EXP
     DEC           →  VARDEC | FUNDEC
-    TYPE          →  'B' | 'N' | 'C' | 'S' | 'Y' | ID | '<>' | '[' TYPE ']'
+    TYPE          →  'B' | 'N' | 'C' | 'S' | 'Y' | ID | '[' TYPE ']'
     VARDEC        →  TYPE ID '=' EXP
     FUNDEC        →  'DF' ID '(' PARAMS ') BR BLOCK
     PARAMS        →  (' 'ID)*
@@ -180,10 +180,16 @@ SYNTAX IN PROGRESS
     EXP1          →  EXP2 ('&&' EXP2)*
     EXP2          →  EXP3 (RELOP EXP3)?
     EXP3          →  EXP4 (MULOP EXP4)?
-    BOOL          →  ‘T’ | ‘F’
+    EXP4          →  PREFIXOP EXP5?
+    EXP5          →  EXP6 (ARGS)? 
+    EXP6          →  EXP7 ('.' ID ARGS?)* 
+    EXP7          →  LITERAL | ID ('[' EXP ']')* | '(' EXP ')' | ARRAYREF
+    LITERAL       →  NUMLIT | STRLIT | CHARLIT | 'T' | 'F' | '<>' 
     ADDOP         →  '+' | '-'
     MULOP         →  '*' | '/' | '%'
     PREFIXOP      →  '-' | '!' | '~' | 'char' | 'int' | 'string' | 'length'
+    ARRAYREF      →  '[' (EXP (',' EXP)*)? ']'
+    ARGS          →  '(' (EXP (',' EXP)*)? ')'
     BLOCK         →  (STMT BR)+
 
 
@@ -195,3 +201,4 @@ MICROSYNTAX
     ID            →  '_'?[a-z]+ ([-_a-z0-9])*
     NUMLIT        →  [0-9]+ ('.' [0-9]*)?
     STRLIT        →  '"'  ( NUMLIT | [a-Z])*  '"'
+    CHARLIT       →  [']  ( NUMLIT | [a-Z])*  [']

@@ -48,7 +48,7 @@ SKIP: {
 TOKEN: {
     "I" | "EI" | "E" | "DF" | "DC" | "L" | "R" | "B"
     | "N" | "S" | "C" | "Y" | "< >" | "T" | "F" | "P" | "LU" | "LF"
-    | "LW" |
+    | "LW"
     | ":" | "," | "+" | "-" | "*" | "/" | "==" | "^"
     | "<" | "<=" | "=" | ">=" | ">" | "(" | ")" | "[" | "]"
 |
@@ -81,9 +81,7 @@ TOKEN: {
     >
 |
     < ID: <LETTER> (<LETTER>|<DIGIT>|"_")* >
-|
-
-    < 
+| 
     < #LETTER: [
     "\u0061"-"\u007a"
     ] >
@@ -132,7 +130,7 @@ Statement STMT(): {
 }
 
 // ---------------------------------
-// DEC -> VARDEC | PROCDEC | FUNCDEC
+// DEC -> VARDEC | FUNCDEC
 // ---------------------------------
 
 Statement DEC(): {
@@ -143,7 +141,7 @@ Statement DEC(): {
     |
         LOOKAHEAD(2) s = FUNDEC()
     |
-        s = PROCDEC()
+        s = FUNDEC()
     )
     {return s;}
 }
@@ -159,9 +157,9 @@ Variable VARDEC(): {
     Expression e = null;
     boolean constant = false;
 }{
-    "my" v = <ID> "is"
+    v = <ID>
     (
-        ("always" {constant = true;})? e = EXP()
+        ("_" {constant = true;})? e = EXP()
     |
         ("a" | "an") (t = TYPE())?
     )
