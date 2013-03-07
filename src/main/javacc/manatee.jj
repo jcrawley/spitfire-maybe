@@ -192,6 +192,13 @@ String TYPE(): {
         "Y" {t = "any";}
     |
         "N" {t = "number";}
+    |
+  		ID()  		{  		  t = ID();
+  		}
+ |
+ 		"< >" 		{ 		  t = "null" 		}|
+		"[" TYPE() "]"		{		  t = "array"
+		}
     )
     {builder.append(t);}
     (
@@ -203,7 +210,7 @@ String TYPE(): {
 // ----------------------------------
 // PROCDEC -> to ID PARAMS? BLOCK end
 // ----------------------------------
-
+/*
 Procedure PROCDEC(): {
     Token name;
     List<Variable> params = new ArrayList<Variable>();
@@ -212,7 +219,7 @@ Procedure PROCDEC(): {
     "to" name = <ID> (PARAMS(params))? body = BLOCK() "end"
     {return new Procedure(name.image, params, body);}
 }
-
+*/
 
 // ----------------------------------------------------------------------
 // FUNDEC -> to get (a | an | some | the)? TYPE ID (of PARAMS)? BLOCK end
@@ -225,10 +232,9 @@ Function FUNDEC(): {
     Block body;
 
 }{
-    "to" "get" ("a" | "an" | "some" | "the")?
-    type = TYPE()
+    "DF"
     name = <ID>
-    ("of" PARAMS(params))?
+    (ARGS())?
     body = BLOCK()
     "end"
     {return new Function(type, name.image, params, body);}
