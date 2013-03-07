@@ -281,7 +281,7 @@ Block BLOCK(): {
 //            |  do nothing
 //            |  do ID EXPLIST?
 // ----------------------------
-
+//******come back to ************
 Statement SIMPLESTMT(): {
     Expression e = null;
     Token t = null;
@@ -302,7 +302,7 @@ Statement SIMPLESTMT(): {
         "exit" "the" "loop"
         {return new ExitStatement();}
     |
-        "return" (e = EXP())?
+        "R" (e = EXP())?
         {return new ReturnStatement(e);}
     |
         LOOKAHEAD(2) "do" "nothing"
@@ -356,16 +356,16 @@ Statement CONDITIONAL(): {
     Block b;
     Block elseBlock = null;
 }{
-    "if" e = EXP() b = BLOCK()
+    "I" e = EXP() b = BLOCK()
     {arms.add(new ConditionalStatement.Arm(e, b));}
     (
-        LOOKAHEAD(2) "else" "if" e = EXP() b = BLOCK()
+        LOOKAHEAD(2)"|" "EI" e = EXP() b = BLOCK()
         {arms.add(new ConditionalStatement.Arm(e, b));}
     )*
     (
-        "else" elseBlock = BLOCK()
+        "E" elseBlock = BLOCK()
     )?
-    "end"
+    //"end"
     {return new ConditionalStatement(arms, elseBlock);}
 }
 
@@ -384,7 +384,7 @@ Statement LOOP(): {
     Block b;
 }{
     (
-        "loop" (e = EXP() "times")? b = BLOCK() "end"
+        "LU" (e = EXP() "times")BR b = BLOCK() BR
         {return e == null ? new PlainLoop(b) : new TimesLoop(e, b);}
     |
         "while" e = EXP() b = BLOCK() "end"
