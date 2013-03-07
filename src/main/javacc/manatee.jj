@@ -128,7 +128,8 @@ Statement STMT(): {
     |
         s = LOOP() 
     |
-        S = EXP()
+        s = EXP()
+ 
     )
     ((<BR>)+ | <EOF>)
     {return s;}
@@ -143,8 +144,6 @@ Statement DEC(): {
 }{
     (
         s = VARDEC()
-    |
-        LOOKAHEAD(2) s = FUNDEC()
     |
         s = FUNDEC()
     )
@@ -166,7 +165,7 @@ Variable VARDEC(): {
     (
         ("_" {constant = true;})? e = EXP()
     |
-        ("a" | "an") (t = TYPE())?
+         (t = TYPE())
     )
     {return new Variable(v.image, t, e, constant);}
 }
@@ -658,7 +657,7 @@ String MULOP(): {
 // PREFIX -> '-' | not | length of
 // -------------------------------
 
-String PREFIX(): {
+String PREFIXOP(): {
     Token t;
 }{
     (t = "-" | t = "not" | t = "length" "of")
