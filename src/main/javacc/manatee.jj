@@ -432,43 +432,43 @@ Expression EXP1(): {
 }
 
 // --------------------------
-// EXP5 -> EXP6 (RELOP EXP6)?
+// EXP2 -> EXP3 (RELOP EXP3)?
 // --------------------------
 
-Expression EXP5(): {
+Expression EXP2(): {
     String op;
     Expression e1;
     Expression e2;
 }{
-    e1 = EXP6()
+    e1 = EXP3()
     (
         op = RELOP()
-        e2 = EXP6()
+        e2 = EXP3()
         {e1 = new BinaryExpression(e1, op, e2);}
     )?
     {return e1;}
 }
 
 // ----------------------------
-// EXP6 -> EXP7 (SHIFTOP EXP7)*
+// EXP3 -> EXP4 (MULOP EXP4)?
 // ----------------------------
 
-Expression EXP6(): {
+Expression EXP3(): {
     String op;
     Expression e1;
     Expression e2;
 }{
-    e1 = EXP7()
+    e1 = EXP4()
     (
-        op = SHIFTOP()
-        e2 = EXP7()
+        op = MULOP()
+        e2 = EXP4()
         {e1 = new BinaryExpression(e1, op, e2);}
-    )*
+    )?
     {return e1;}
 }
 
 // --------------------------
-// EXP7 -> EXP8 (ADDOP EXP8)*
+// EXP4 -> EXP5 (ADDOP EXP5)*
 // --------------------------
 
 Expression EXP7(): {
