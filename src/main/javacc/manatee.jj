@@ -375,7 +375,7 @@ Statement CONDITIONAL(): {
 //             |  while EXP
 //             |  for each ID in EXP (to EXP (by EXP)?)?
 // -----------------------------------------------------
-
+//needs more work
 Statement LOOP(): {
     Token t = null;
     Expression e = null;
@@ -384,13 +384,13 @@ Statement LOOP(): {
     Block b;
 }{
     (
-        "LU" (e = EXP() "times")BR b = BLOCK() BR
+        "LU" (e = EXP())BR b = BLOCK() BR
         {return e == null ? new PlainLoop(b) : new TimesLoop(e, b);}
     |
-        "while" e = EXP() b = BLOCK() "end"
+        "LW" e = EXP() b = BLOCK() BR
         {return new WhileLoop(e, b);}
     |
-        "for" "each" t = <ID> "in" e = EXP()
+        "LF" t = <ID> "in" e = EXP() //???
         (
             "to" e2 = EXP() ("by" e3 = EXP())?
         )?
@@ -414,7 +414,7 @@ Expression EXP(): {
     Expression e2;
 }{
     e1 = EXP1()
-    ("or" e2 = EXP1() {e1 = new BinaryExpression(e1, "or", e2);})*
+    ("||" e2 = EXP1() {e1 = new BinaryExpression(e1, "||", e2);})*
     {return e1;}
 }
 
@@ -426,8 +426,8 @@ Expression EXP1(): {
     Expression e1;
     Expression e2;
 }{
-    e1 = EXP5()
-    ("and" e2 = EXP5() {e1 = new BinaryExpression(e1, "and", e2);})*
+    e1 = EXP2()
+    ("&&" e2 = EXP2() {e1 = new BinaryExpression(e1, "and", e2);})*
     {return e1;}
 }
 
