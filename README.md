@@ -209,7 +209,7 @@ SYNTAX IN PROGRESS
     BOOL          →  'T' | 'F'
     ADDOP         →  '+' | '-'
     MULOP         →  '*' | '/' | '%' | '^' | '**'
-    RELOP         →  '<' | '<=' | '=' | '!=' | '>=' | '>'
+    RELOP         →  '<' | '<=' | '==' | '!=' | '>=' | '>'
     PREFIXOP      →  '-' | '!' | '~' | 'char' | 'int' | 'string' | 'length'
     BLOCK         →  (STMT BR)+
     ARGS          →  '('EXP (EXP ',')* ')' | '()' 
