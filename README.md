@@ -6,7 +6,7 @@ Spitfire is a language that allows the user to implement solutions as fast as po
 
 SPITFIRE ON THE LEFT, JAVASCRIPT ON THE RIGHT
 
-    P “Hello, world!”         		            console.log(“Hello, world!”);
+    P “Hello, world!”             	            console.log(“Hello, world!”);
 
 VARIABLE DECLARATIONS
 
@@ -191,12 +191,12 @@ SYNTAX IN PROGRESS
     VARDEC        →  TYPE ID '=' EXP
     FUNDEC        →  'DF' ID ARGS BR BLOCK
     PARAMS        →  '(' ID (ID ',')* ')'
-    ASSIGNMENT    →  ID ‘=’ EXP
+    ASSIGNMENT    →  ID '=' EXP
     PRINTSTMT     →  'P' EXP
-    RETURNSTMT    →  ‘R’ EXP 
-    CONDITIONAL   → ‘I’ EXP BLOCK (| ‘EF’ EXP BLOCK)* (| ‘E' BLOCK)?
+    RETURNSTMT    →  'R' EXP 
+    CONDITIONAL   → 'I' EXP BLOCK (| 'EF' EXP BLOCK)* (| 'E' BLOCK)?
     LOOP          →  'LU' EXP BR BLOCK
-                  →  ‘LF’ ID EXP EXP EXP? BR BLOCK
+                  →  'LF' ID EXP EXP EXP? BR BLOCK
                   →  'LW' EXP BR BLOCK
 
     EXP           →  EXP1 ('||' EXP1)*
@@ -206,7 +206,7 @@ SYNTAX IN PROGRESS
     EXP4          →  EXP5 (MULOP EXP5)?
     EXP5          →  PREFIXOP? EXP6
     EXP6          →  NUMLIT | STRLIT | ID | '(' EXP ')' | EXP '[' EXP ']' | ID ARGS
-    BOOL          →  ‘T’ | ‘F’
+    BOOL          →  'T' | 'F'
     ADDOP         →  '+' | '-'
     MULOP         →  '*' | '/' | '%'
     PREFIXOP      →  '-' | '!' | '~' | 'char' | 'int' | 'string' | 'length'
@@ -216,8 +216,8 @@ SYNTAX IN PROGRESS
 MICROSYNTAX
     
     BR            → NEWLINE
-    COMMENT       → ‘$’ ()*  NEWLINE
-                  | ‘$$’ ()* ‘$$’
+    COMMENT       → '$' ()*  NEWLINE
+                  | '$$' ()* '$$'
     ID            →  '_'?[a-z]+ ([-_a-z0-9])*
     NUMLIT        →  [0-9]+ ('.' [0-9]*)?
     STRLIT        →  '"'  ( NUMLIT | [a-Z])*  '"'
