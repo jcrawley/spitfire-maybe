@@ -186,10 +186,11 @@ SYNTAX IN PROGRESS
                   |  LOOP
                   |  EXP
                   |  RETURNSTMT
-    DEC           →  VARDEC | FUNDEC
+    DEC           →  VARDEC | FUNDEC | CLASSDEC
     TYPE          →  'B' | 'N' | 'C' | 'S' | 'Y' | ID | '<>' | '[' TYPE ']'
     VARDEC        →  TYPE ID '=' EXP
     FUNDEC        →  'DF' ID ARGS BR BLOCK
+    CLASSDEC      →  'DC' ID BR                 //unfinished
     PARAMS        →  '(' ID (ID ',')* ')'
     ASSIGNMENT    →  ID '=' EXP
     PRINTSTMT     →  'P' EXP
