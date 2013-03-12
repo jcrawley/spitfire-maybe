@@ -194,18 +194,17 @@ SYNTAX IN PROGRESS
     ASSIGNMENT    →  ID '=' EXP
     PRINTSTMT     →  'P' EXP
     RETURNSTMT    →  'R' (EXP | BOOL | ID)
-    CONDITIONAL   → 'I' EXP BLOCK (| 'EF' EXP BLOCK)* (| 'E' BLOCK)?
+    CONDITIONAL   → 'I' EXP BLOCK ('EF' EXP BLOCK)* ('E' BLOCK)?
     LOOP          →  'LU' EXP BR BLOCK
                   →  'LF' ID EXP EXP EXP? BR BLOCK
                   →  'LW' EXP BR BLOCK
-
     EXP           →  EXP1 ('||' EXP1)*
     EXP1          →  EXP2 ('&&' EXP2)*
     EXP2          →  EXP3 (RELOP EXP3)?
     EXP3          →  EXP4 (ADDOP EXP4)?
     EXP4          →  EXP5 (MULOP EXP5)?
     EXP5          →  PREFIXOP? EXP6
-    EXP6          →  NUMLIT | STRLIT | ID | '(' EXP ')' | EXP '[' EXP ']' | ID ARGS
+    EXP6          →  BOOL | NUMLIT | STRLIT | ID | '(' EXP ')' | EXP '[' EXP ']' | ID ARGS
     BOOL          →  'T' | 'F'
     ADDOP         →  '+' | '-'
     MULOP         →  '*' | '/' | '%'
