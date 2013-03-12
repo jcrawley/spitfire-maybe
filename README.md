@@ -185,6 +185,7 @@ SYNTAX IN PROGRESS
                   |  CONDITIONAL
                   |  LOOP
                   |  EXP
+                  |  RETURNSTMT
     DEC           →  VARDEC | FUNDEC
     TYPE          →  'B' | 'N' | 'C' | 'S' | 'Y' | ID | '<>' | '[' TYPE ']'
     VARDEC        →  TYPE ID '=' EXP
@@ -192,12 +193,12 @@ SYNTAX IN PROGRESS
     PARAMS        →  '(' ID (ID ',')* ')'
     ASSIGNMENT    →  ID ‘=’ EXP
     PRINTSTMT     →  'P' EXP
-    CONDITIONAL   → ‘I’ EXP BLOCK (| ‘EF’ EXP BLOCK)* (| ‘E' EXP BLOCK)?
+    RETURNSTMT    →  ‘R’ EXP 
+    CONDITIONAL   → ‘I’ EXP BLOCK (| ‘EF’ EXP BLOCK)* (| ‘E' BLOCK)?
     LOOP          →  'LU' EXP BR BLOCK
                   →  ‘LF’ ID EXP EXP EXP? BR BLOCK
                   →  'LW' EXP BR BLOCK
-    PRINTSTMT     →  ‘P’ EXP
-    RETURNSTMT    →  ‘R’ EXP 
+
     EXP           →  EXP1 ('||' EXP1)*
     EXP1          →  EXP2 ('&&' EXP2)*
     EXP2          →  EXP3 (RELOP EXP3)?
@@ -211,7 +212,6 @@ SYNTAX IN PROGRESS
     PREFIXOP      →  '-' | '!' | '~' | 'char' | 'int' | 'string' | 'length'
     BLOCK         →  (STMT BR)+
     ARGS          →  '('EXP (EXP ',')* ')' | '()' 
-
 
 MICROSYNTAX
     
