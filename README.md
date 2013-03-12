@@ -208,7 +208,8 @@ SYNTAX IN PROGRESS
     EXP6          →  BOOL | NUMLIT | STRLIT | ID | '(' EXP ')' | EXP '[' EXP ']' | ID ARGS
     BOOL          →  'T' | 'F'
     ADDOP         →  '+' | '-'
-    MULOP         →  '*' | '/' | '%'
+    MULOP         →  '*' | '/' | '%' | '^' | '**'
+    RELOP         →  '<' | '<=' | '=' | '!=' | '>=' | '>'
     PREFIXOP      →  '-' | '!' | '~' | 'char' | 'int' | 'string' | 'length'
     BLOCK         →  (STMT BR)+
     ARGS          →  '('EXP (EXP ',')* ')' | '()' 
