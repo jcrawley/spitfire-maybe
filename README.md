@@ -193,7 +193,7 @@ SYNTAX IN PROGRESS
     PARAMS        →  '(' ID (ID ',')* ')'
     ASSIGNMENT    →  ID '=' EXP
     PRINTSTMT     →  'P' EXP
-    RETURNSTMT    →  'R' EXP 
+    RETURNSTMT    →  'R' (EXP | BOOL | ID)
     CONDITIONAL   → 'I' EXP BLOCK (| 'EF' EXP BLOCK)* (| 'E' BLOCK)?
     LOOP          →  'LU' EXP BR BLOCK
                   →  'LF' ID EXP EXP EXP? BR BLOCK
