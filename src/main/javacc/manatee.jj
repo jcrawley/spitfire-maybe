@@ -484,21 +484,16 @@ Expression EXP4(): {
     {return e1;}
 }
 // --------------------------
-// EXP8 -> EXP9 (MULOP EXP9)*
+// EXP5 -> PREFIXOP? EXP6
 // --------------------------
 
-Expression EXP8(): {
+Expression EXP5(): {
     String op;
     Expression e1;
     Expression e2;
 }{
-    e1 = EXP9()
-    (
-        op = MULOP()
-        e2 = EXP9()
-        {e1 = new BinaryExpression(e1, op, e2);}
-    )*
-    {return e1;}
+    (op = PREFIX())? e = EXP6()
+    {return op == null ? e : new UnaryExpression(op, e);}
 }
 
 // ---------------------
@@ -535,33 +530,36 @@ Expression EXP10(): {
 }
 
 // -------------------------
-// EXP11 -> LITERAL
-//       |  ID
-//       |  '[' EXPLIST? ']'
-//       |  '(' EXP ')'
+// EXP6 -> BOOL | NUMLIT | STRLIT | ID | '(' EXP ')' | EXP '[' EXP ']' | ID ARGS
 // -------------------------
 
-Expression EXP11(): {
+Expression EXP6(): {
     List<Expression> expressions = new ArrayList<Expression>();
     Expression e = null;
     Token t;
 }{
     (
-        e = LITERAL()
+        e = BOOL()
+        {return e;}
+    |
+        e = NUMLIT()
+        {return e;}
+    |
+        e = STRLIT()
         {return e;}
     |
         t = <ID>
         {return new IdentifierExpression(t.image);}
     |
         "[" (expressions = EXPLIST())? "]"
-        {return new ArrayConstructor(expressions);}
+        {return new ArrayConstructor(expressions);} //need to fix
     |
         "(" e = EXP() ")"
         {return e;}
     )
 }
 
-// ------------------
+/*// ------------------
 // LITERAL -> nothing
 //         |  yes
 //         |  no
@@ -601,9 +599,10 @@ List<Expression> EXPLIST(): {
     ("," e = EXP() {expressions.add(e);})*
     {return expressions;}
 }
+*/
 
 // ------------------------------------------------------
-// RELOP -> '<' | '<=' | '=' | '≠' | '>=' | '>' | is not?
+// RELOP -> '<' | '<=' | '==' | '!=' | '>=' | '>' |
 // ------------------------------------------------------
 
 String RELOP(): {
@@ -614,30 +613,16 @@ String RELOP(): {
     |
     "=" {return "=";}
     |
-    "≠" {return "≠";}
+    "!=" {return "!=";}
     |
     ">=" {return ">=";}
     |
     ">" {return ">";}
-    |
-    LOOKAHEAD(2) "is" "not" {return "is not";}
-    |
-    "is" {return "is";}
-}
-
-// ----------------------
-// SHIFTOP -> '<<' | '>>'
-// ----------------------
-
-String SHIFTOP(): {
-    Token t;
-}{
-    (t = "<<" | t = ">>")
-    {return t.image;}
+  
 }
 
 // -----------------------
-// ADDOP -> '+' | '-' | in
+// ADDOP -> '+' | '-' |
 // -----------------------
 
 String ADDOP(): {
@@ -648,18 +633,18 @@ String ADDOP(): {
 }
 
 // ------------------
-// MULOP -> '*' | '/'
+// '*' | '/' | '%' | '^' | '**'
 // ------------------
 
 String MULOP(): {
     Token t;
 }{
-    (t = "*" | t = "/")
+    (t = "*" | t = "/" | t = "%" | t = "^" | "**")
     {return t.image;}
 }
 
 // -------------------------------
-// PREFIX -> '-' | not | length of
+// PREFIX -> '-' | "!" | "~"
 // -------------------------------
 
 String PREFIXOP(): {
