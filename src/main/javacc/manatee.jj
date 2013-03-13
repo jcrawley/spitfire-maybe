@@ -450,7 +450,7 @@ Expression EXP2(): {
 }
 
 // ----------------------------
-// EXP3 -> EXP4 (MULOP EXP4)?
+// EXP3 -> EXP4 (ADDOP EXP4)?
 // ----------------------------
 
 Expression EXP3(): {
@@ -460,7 +460,7 @@ Expression EXP3(): {
 }{
     e1 = EXP4()
     (
-        op = MULOP()
+        op = ADDOP()
         e2 = EXP4()
         {e1 = new BinaryExpression(e1, op, e2);}
     )?
@@ -468,18 +468,17 @@ Expression EXP3(): {
 }
 
 // --------------------------
-// EXP4 -> EXP5 (ADDOP EXP5)*
+// EXP4 -> EXP5 (MULOP EXP5)*
 // --------------------------
 
-Expression EXP7(): {
+Expression EXP4(): {
     String op;
     Expression e1;
-    Expression e2;
 }{
-    e1 = EXP8()
+    e1 = EXP5()
     (
-        op = ADDOP()
-        e2 = EXP8()
+        op = MULOP()
+        e2 = EXP5()
         {e1 = new BinaryExpression(e1, op, e2);}
     )*
     {return e1;}
