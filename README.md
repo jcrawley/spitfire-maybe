@@ -1,6 +1,8 @@
-# Spitfire
+# Spitfire (maybe)
 
 Spitfire is a language that allows the user to implement solutions as fast as possible using the least amount of keystones. Ain't nobody got time to type out whole words! Spitfire is statically and strongly typed. It is FORTRAN-esque in that all of its keywords are capitalized. One day in class, `jcrawley` said,  `"I want to make a language that spits fire."` On that fateful day, we knew we had our name.
+
+--------------------------------
 
 ### Examples
 
@@ -195,7 +197,8 @@ SYNTAX IN PROGRESS
     ASSIGNMENT    →  ID '=' EXP
     PRINTSTMT     →  'P' EXP
     RETURNSTMT    →  'R' (EXP | BOOL | ID)
-    CONDITIONAL   → 'I' EXP BLOCK ('EF' EXP BLOCK)* ('E' BLOCK)?
+    CONDITIONAL   →  'I' EXP BLOCK ('EF' EXP BLOCK)* ('E' BLOCK)?
+    ARRAYLOOKUP   →  ID'['NUMLIT']'
     LOOP          →  'LU' EXP BR BLOCK
                   →  'LF' ID EXP EXP EXP? BR BLOCK
                   →  'LW' EXP BR BLOCK
@@ -208,7 +211,8 @@ SYNTAX IN PROGRESS
     EXP6          →  BOOL | NUMLIT | STRLIT | ID | '(' EXP ')' | EXP '[' EXP ']' | ID ARGS
     BOOL          →  'T' | 'F'
     ADDOP         →  '+' | '-'
-    MULOP         →  '*' | '/' | '%'
+    MULOP         →  '*' | '/' | '%' | '^' | '**'
+    RELOP         →  '<' | '<=' | '==' | '!=' | '>=' | '>'
     PREFIXOP      →  '-' | '!' | '~' | 'char' | 'int' | 'string' | 'length'
     BLOCK         →  (STMT BR)+
     ARGS          →  '('EXP (EXP ',')* ')' | '()' 
