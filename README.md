@@ -4,9 +4,9 @@ Spitfire is a language that allows the user to implement solutions as fast as po
 
 --------------------------------
 
-### Examples
+#Examples
 
-SPITFIRE ON THE LEFT, JAVASCRIPT ON THE RIGHT
+**SPITFIRE ON THE LEFT, JAVASCRIPT ON THE RIGHT**
 
     P “Hello, world!”             	            console.log(“Hello, world!”);
 
