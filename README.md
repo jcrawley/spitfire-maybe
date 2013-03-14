@@ -129,13 +129,25 @@ Numbers in Spitfire can be denoted as octal, hexadecimal, or decimal. Octal numb
 
 **STRINGS AND STRING MANIPULATION**
 
+Strings in Spitfire are easy to manipulate and use. Many ways or manipulating string in Spitfire use thses brackets: `[` and `]`. For a certain slice of a string, one can specify which part by viewing the string as an array of characters. Let us use `i` and `j` to describe how this works. Note: the end index of the slice is inclusive. More information on arrays is listed below.
+
     S s = "Hello” + “world!” 	            var s = “Hello” + “world!”; 
     “Hello, world!" | " "                   “Hello, world!”.split(“ ");
-    [“Spit”,”fire"] @ "-"                   [“Spit”, “fire”].join(“”);
-    “Spitfire”.l                            "Spitfire".length(); 
-    “Spitfire is quick”.f("i")              "Spitfire is quick".indexOf("i"); // .pos .ix				
-    “2”.num                                 parseInt("2");
-    3.str                                   3 .toString();
+    [“Spit”,”fire"] @ ""                    [“Spit”, “fire”].join(“”);
+    S s = “Spitfire”[3-5]                   var s = "Spitfire".slice(3,6);
+    S f = "Spitfire"[3-]
+    “Spitfire is quick”["i"]                "Spitfire is quick".indexOf("i"); // .pos .ix				
+    
+**TYPECASTING**
+
+In Spitfire, users can typecast any variable into another by simply putting brackets around the type you wish the variable to become after the variable.
+    
+    “2”[N]                                 parseInt("2");
+    3[S]                                   3 .toString();
+    C a = '8'                              var a = 'c';
+    S b = a[S]                             var b = String.valueOf(c);
+    S c = "f"                              var c = "f";
+    C d = c[C]                             var d = c.charAt(0);
 
 **LOOPS**
 
@@ -185,7 +197,7 @@ Spitfire's arrays are just like any other languages but with some spice. Array d
     N n = 78                                var n = 78;
     p <= n                                  p.push(n);
     P p[-1]					                console.log(p[p.length-1]);
-    [N] q = p					            var q = p;
+    [N] q = p[0-2]					        var q = p;
     [Y] a = [88, false, “0001”, green]		var a = [88, false, “0001”, green]; 
 
 **SYNTAX**
