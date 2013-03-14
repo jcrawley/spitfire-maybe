@@ -205,9 +205,6 @@ String TYPE(): {
 		}
     )
     {builder.append(t);}
-    (
-        LOOKAHEAD(2) "list" {builder.append(" list");}
-    )*
     {return builder.toString();}
 }
 
@@ -226,7 +223,7 @@ Procedure PROCDEC(): {
 */
 
 // ----------------------------------------------------------------------
-// FUNDEC -> to get (a | an | some | the)? TYPE ID (of PARAMS)? BLOCK end
+// FUNDEC -> 'DF' ID ARGS BR BLOCK
 // ----------------------------------------------------------------------
 
 Function FUNDEC(): {
@@ -239,13 +236,13 @@ Function FUNDEC(): {
     "DF"
     name = <ID>
     (ARGS())?
+    
     body = BLOCK()
-    "end"
     {return new Function(type, name.image, params, body);}
 }
 
 // ----------------------------------------------------
-// PARAMS -> TYPE ID (',' TYPE ID)* (','? and TYPE ID)?
+// PARAMS -> '(' ID (ID ',')* ')'
 // ----------------------------------------------------
 
 void PARAMS(List<Variable> params): {
@@ -265,7 +262,7 @@ void PARAMS(List<Variable> params): {
 }
 
 // ----------------------
-// BLOCK -> ":" BR+ STMT+
+// BLOCK -> (BR STMT)+
 // ----------------------
 
 Block BLOCK(): {
@@ -276,81 +273,9 @@ Block BLOCK(): {
     {return new Block(statements);}
 }
 
-// ----------------------------
-// SIMPLESTMT -> write EXP
-//            |  read EXP
-//            |  set EXP to EXP
-//            |  exit the loop
-//            |  return EXP?
-//            |  do nothing
-//            |  do ID EXPLIST?
-// ----------------------------
-//******come back to ************
-Statement SIMPLESTMT(): {
-    Expression e = null;
-    Token t = null;
-    Expression source;
-    Expression target;
-    List<Expression> args = new ArrayList<Expression>();
-}{
-    (
-        "write" e = EXP()
-        {return new WriteStatement(e);}
-    |
-        "read" e = EXP()
-        {return new ReadStatement(e);}
-    |
-        "set" target = EXP() "to" source = EXP()
-        {return new AssignmentStatement(target, source);}
-    |
-        "exit" "the" "loop"
-        {return new ExitStatement();}
-    |
-        "R" (e = EXP())?
-        {return new ReturnStatement(e);}
-    |
-        LOOKAHEAD(2) "do" "nothing"
-        {return new DoNothingStatement();}
-    |
-        "do" t = <ID> (args = EXPLIST())?
-        {return new CallStatement(t.image, args);}
-    )
-}
 
-// ----------------------------
-// MODIFIER -> (if | while) EXP
-// ----------------------------
-
-ModifiedStatement.Modifier MODIFIER(): {
-    ModifiedStatement.ModifierType m;
-    Expression e;
-}{
-    (
-        "if" {m = ModifiedStatement.ModifierType.IF;}
-    |
-        "while" {m = ModifiedStatement.ModifierType.WHILE;}
-    )
-    e = EXP()
-    {return new ModifiedStatement.Modifier(m, e);}
-}
-
-// --------------------------
-// COMPLEXSTMT -> CONDITIONAL
-//             |  LOOP
-// --------------------------
-
-Statement COMPLEXSTMT(): {
-    Statement s;
-}{
-    (
-        s = CONDITIONAL()
-    |
-        s = LOOP()
-    )
-    {return s;}
-}
 // ------------------------------------------------------------------
-// CONDITIONAL -> if EXP BLOCK (else if EXP BLOCK)* (else BLOCK)? end
+// CONDITIONAL -> 'I' EXP BLOCK ('EF' EXP BLOCK)* ('E' BLOCK)?
 // ------------------------------------------------------------------
 
 Statement CONDITIONAL(): {
