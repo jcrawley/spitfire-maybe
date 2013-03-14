@@ -109,6 +109,13 @@ Script SCRIPT(): {
     {return new Script(statements);}
 }
 
+Arguments ARGS():{	List<Expression > arguments = new ArrayList<Expression >();
+	Expression e;
+	Expression e1;
+}{	(	  "(" e = EXP()	  {	    arguments.add(e);	  }	  (	    e1 = EXP() ","	    {	      arguments.add(e1);	    }	  )* ")"
+	  {	    return new Arguments(arguments); //needs a Java file	  })	  
+}
+
 // ---------------------------------------------------------------------
 // STMT -> 	    |  DEC
 //              |  ASSIGNMENT
@@ -472,6 +479,7 @@ Expression EXP5(): {
 Expression EXP6(): {
     List<Expression> expressions = new ArrayList<Expression>();
     Expression e = null;
+    Expression e2 = null;
     Token t;
 }{
     (
@@ -487,10 +495,10 @@ Expression EXP6(): {
         t = <ID>
         {return new IdentifierExpression(t.image);}
     |
-        "[" (expressions = EXPLIST())? "]"
+       e2=EXP() "[" e = EXP6() "]"
         {return new ArrayConstructor(expressions);} //need to fix
     |
-        "(" e = EXP() ")"
+        "(" e = EXP6() ")"
         {return e;}
     )
 }
