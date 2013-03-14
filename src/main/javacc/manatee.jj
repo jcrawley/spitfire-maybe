@@ -483,6 +483,24 @@ Expression EXP6(): {
     Token t;
 }{
     (
+        e = EXP7()
+        {return e;}
+    |
+        t = <ID>
+        {return new IdentifierExpression(t.image);}
+    |
+       e2 = EXP7() "[" e = EXP7() "]"
+        {return new ArrayConstructor(expressions);} //need to fix
+    |
+        "(" e = EXP7() ")"
+        {return e;}
+    )
+}
+
+Expression EXP7():{	Expression e2 = null;
+    Token t;
+}{
+    (
         e = < BOOL >
         {return e;}
     |
@@ -494,13 +512,8 @@ Expression EXP6(): {
     |
         t = <ID>
         {return new IdentifierExpression(t.image);}
-    |
-       e2=EXP() "[" e = EXP6() "]"
-        {return new ArrayConstructor(expressions);} //need to fix
-    |
-        "(" e = EXP6() ")"
-        {return e;}
-    )
+    
+  )
 }
 
 /*// ------------------
@@ -572,7 +585,7 @@ String RELOP(): {
 String ADDOP(): {
     Token t;
 }{
-    (t = "+" | t = "-" | t = "in")
+    (t = "+" | t = "-" )
     {return t.image;}
 }
 
