@@ -212,7 +212,7 @@ Spitfire's arrays are just like any other languages but with some spice. Array d
 
 **SYNTAX**
 
-Here is the syntax for Spitfire. Our EBNF syntax categories and compound tokens that are shown in all caps on the left of the arrow. Our symbols are as follows: `|` is for alternatives, `*` is zero or more, `+` is for one or more, `?` is for zero or one, and parentheses are for groups.
+Here is the syntax for Spitfire. Our EBNF symbols are as follows: `|` is for alternatives, `*` is zero or more, `+` is for one or more, `?` is for zero or one, and parentheses are for groups.
 
     SCRIPT        →  (STMT BR)+
     STMT          →  DEC
