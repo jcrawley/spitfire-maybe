@@ -12,6 +12,8 @@ SPITFIRE ON THE LEFT, JAVASCRIPT ON THE RIGHT
 
 VARIABLE DECLARATIONS
 
+Variable declarations are simple and easy in Spitfire. No semicolons necessary! A list of types in Spitfire can be found below.
+
     S s = "spitfire" 					        var s = "spit"; 
     B found = T                                 var found = true;
     N hex = 0x34A4                              var hex = 0x34A4;
@@ -19,7 +21,9 @@ VARIABLE DECLARATIONS
 
 PARALLEL DECLARATION
 
-    S s,f = "spit","fire" 				        var s = "spit";
+Spitfire allows parallel declaration. simply put a space between the variables you want to declare, and a space between the values you want the variables to be inititialized to.
+
+    S s f = "spit" "fire" 				        var s = "spit";
     						                    var f = "fire";
 
 CONSTANTS
@@ -31,13 +35,17 @@ In Spitfire constants start with `_`. Uppercase identifier names are not allowed
 
 ASSIGNMENT IS MOST CERTAINLY NOT INITIALIZATION
 
+In Spitfire, you can assign variables to other values if you so choose, It is exampled below.
+
     N x = 1 					                var x = 1;
     x = x + 1 					                x = x + 1;
     P x                                         console.log(x);
 
 ARITHMETIC EXPRESSIONS
 
-    y / (4 - x) * 2.5 				            y / (4 - x) * 2.5
+Arithmetic expressions work similarly to most languages. Spitfire allows both `^` and `**` for denoting powers.
+
+    ((3 / 2) - (a * b)) ^ ((300 % c) + d ** 2)	((3 / 2) - (a * b)) ^ ((300 % c) + d ** 2)	
 
 SWAP
 
@@ -61,19 +69,20 @@ In Spitfire, true and false are denoted by `T` and `F` respectively. Spitfire al
 
 FUNCTIONS
 
-    DF bmi (pounds, inches) 
-      N _kilograms_per_pound = 0.45359237
-      N _meters_per_inch = 0.0254
-      N kilos = pounds * _kilograms_per_pound
-      N inches = inches * _meters_per_inch
-      R kilos / (meters * meters)
+Function calls in Spitfire will work as shown below. A return type is optional in Spitfire. If nothing is provided after the function name, the function is assumed to return void.
+
+    DF bmi N (pounds, inches)                   var bmi = function (pounds, inches) {
+      N _kilograms_per_pound = 0.45359237           var KILOGRAMS_PER_POUND = 0.45359237;
+      N _meters_per_inch = 0.0254                   var METERS_PER_INCH = 0.0254;
+      N kilos = pounds * _kilograms_per_pound       var kilos = pounds * KILOGRAMS_PER_POUND;
+      N inches = inches * _meters_per_inch          var inches = inches * METERS_PER_INCH;
+      R kilos / (meters * meters)                   return kilos / (meters * meters)
+                                                }
         
-    DF gcd (x, y)                               function gcd (x, y) {
+    DF gcd N (x, y)                             var gcd = function (x, y) {
       R x % y == 0 ? x : gcd(y, x % y)              return x%y == 0 ? x : gcd(y, x%y); 
                                                 }
-                                                
-    DF fizzbuzz ()
-                                     
+                                                                  
 
 KEYWORDS
 
@@ -190,7 +199,7 @@ SYNTAX IN PROGRESS
                   |  RETURNSTMT
     DEC           →  VARDEC | FUNDEC | CLASSDEC
     TYPE          →  'B' | 'N' | 'C' | 'S' | 'Y' | ID | '<>' | '[' TYPE ']'
-    VARDEC        →  TYPE ID '=' EXP
+    VARDEC        →  TYPE ID (ID)* '=' EXP (EXP)*
     FUNDEC        →  'DF' ID ARGS BR BLOCK
     CLASSDEC      →  'DC' ID BR                 //unfinished
     PARAMS        →  '(' ID (ID ',')* ')'
