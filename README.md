@@ -226,14 +226,14 @@ Here is the syntax for Spitfire. Our EBNF syntax categories and compound tokens 
     TYPE          →  'B' | 'N' | 'C' | 'S' | 'Y' | ID | '<>' | '[' TYPE ']'
     VARDEC        →  TYPE ID (ID)* '=' EXP (EXP)*
     FUNDEC        →  'DF' ID ARGS BR BLOCK
-    CLASSDEC      →  'DC' ID BR                 //unfinished
+    CLASSDEC      →  'DC' ID BR BLOCK
     PARAMS        →  '(' ID (ID ',')* ')'
     ASSIGNMENT    →  ID '=' EXP
     PRINTSTMT     →  'P' EXP
     RETURNSTMT    →  'R' EXP
     CONDITIONAL   →  'I' EXP BLOCK ('EF' EXP BLOCK)* ('E' BLOCK)?
     ARRAYLOOKUP   →  ID'['NUMLIT']'
-    LOOP          →  'LU' EXP BR BLOCK
+    LOOP          →  'LU' NUMLIT BR BLOCK
                   →  'LF' ID EXP EXP EXP? BR BLOCK
                   →  'LW' EXP BR BLOCK
     EXP           →  EXP1 ('||' EXP1)*
