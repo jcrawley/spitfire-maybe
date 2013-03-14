@@ -359,22 +359,19 @@ Statement LOOP(): {
     Block b;
 }{
     (
-        "LU" (e = EXP())< BR > b = BLOCK() < BR >
+        "LU" (e = EXP())< BR > b = BLOCK() 
         {return e == null ? new PlainLoop(b) : new TimesLoop(e, b);}
     |
-        "LW" e = EXP() b = BLOCK() < BR >
+        "LW" e = EXP() b = BLOCK() 
         {return new WhileLoop(e, b);}
     |
-        "LF" t = <ID> "in" e = EXP() //???
-        (
-            "to" e2 = EXP() ("by" e3 = EXP())?
-        )?
-        b = BLOCK() "end"
+        "LF" t = <ID>  e = EXP() e2 = EXP() (e3 = EXP())? <BR> BLOCK()//???
+        b = BLOCK() 
         {
-            if (e2 == null) {
-                return new CollectionLoop(t.image, e, b);
+            if (e3 == null) {
+                return new CollectionLoop(t.image, e,e2, b); //looping through objects
             } else {
-                return new RangeLoop(t.image, e, e2, e3, b);
+                return new RangeLoop(t.image, e, e2, e3, b); //regular for loop
             }
         }
     )
@@ -607,6 +604,6 @@ String MULOP(): {
 String PREFIXOP(): {
     Token t;
 }{
-    (t = "-" | t = "not" | t = "length" "of")
+    (t = "-" | t = "!" | t= "~")
     {return t.image;}
 }
