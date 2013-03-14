@@ -184,6 +184,7 @@ Variable VARDEC(): {
 
 String TYPE(): {
     String t;
+    Token tok;
     StringBuilder builder = new StringBuilder();
 }{
     (
@@ -197,11 +198,11 @@ String TYPE(): {
     |
         "N" {t = "number";}
     |
-  		ID()  		{  		  t = ID();
+  		< ID >  		{  		  t = "object";
   		}
- |
- 		"< >" 		{ 		  t = "null" 		}|
-		"[" TYPE() "]"		{		  t = "array"
+    |
+ 		"< >" 		{ 		  t = "null"; 		}|
+		"[" TYPE() "]"		{		  t = "array";
 		}
     )
     {builder.append(t);}
@@ -313,10 +314,10 @@ Statement LOOP(): {
     Block b;
 }{
     (
-        "LU" (e = EXP())BR b = BLOCK() BR
+        "LU" (e = EXP())< BR > b = BLOCK() < BR >
         {return e == null ? new PlainLoop(b) : new TimesLoop(e, b);}
     |
-        "LW" e = EXP() b = BLOCK() BR
+        "LW" e = EXP() b = BLOCK() < BR >
         {return new WhileLoop(e, b);}
     |
         "LF" t = <ID> "in" e = EXP() //???
