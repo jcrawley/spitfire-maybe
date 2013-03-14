@@ -129,7 +129,7 @@ Numbers in Spitfire can be denoted as octal, hexadecimal, or decimal. Octal numb
 
 **STRINGS AND STRING MANIPULATION**
 
-Strings in Spitfire are easy to manipulate and use. Many ways or manipulating string in Spitfire use thses brackets: `[` and `]`. For a certain slice of a string, one can specify which part by viewing the string as an array of characters. Let us use `i` and `j` to describe how this works. Note: the end index of the slice is inclusive. More information on arrays is listed below.
+Strings in Spitfire are easy to manipulate and use. Many ways or manipulating string in Spitfire use thses brackets: `[` and `]`. For a certain slice of a string, one can specify which part by viewing the string as an array of characters. Let us use `i` and `j` to describe how this works. `i` will be the beginning index and `j` to denote the end index. If a user puts `[i-j]` after a string, the slice of the string, including `j`, will be returned. If a user simply puts `[i-]`, the slice will be from the beginning index until the end of the string. Note: the end index of the slice is inclusive. More information on arrays is listed below.
 
     S s = "Hello” + “world!” 	            var s = “Hello” + “world!”; 
     “Hello, world!" | " "                   “Hello, world!”.split(“ ");
@@ -201,6 +201,8 @@ Spitfire's arrays are just like any other languages but with some spice. Array d
     [Y] a = [88, false, “0001”, green]		var a = [88, false, “0001”, green]; 
 
 **SYNTAX**
+
+Here is the syntax for Spitfire. Our EBNF syntax categories and compound tokens that are shown in all caps on the left of the arrow. Our symbols are as follows: `|` is for alternatives, `*` is zero or more, `+` is for one or more, `?` is for zero or one, and parentheses are for groups.
 
     SCRIPT        →  (STMT BR)+
     STMT          →  DEC
