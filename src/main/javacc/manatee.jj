@@ -79,6 +79,8 @@ TOKEN: {
     >
 |
     < ID: <LETTER> (<LETTER>|<DIGIT>|"_")* >
+|
+	< BOOL : ["T", "F"] >
 | 
     < #LETTER: [
     "\u0061"-"\u007a"
@@ -138,6 +140,42 @@ Statement STMT(): {
     )
     {return s;}
 }
+
+//----------------------------------
+// ASSIGNMENT    - >  ID '=' EXP
+//----------------------------------
+
+AssignmentStatement ASSIGNMENT():{
+  Expression target;
+  Expression source;}{  (    target = < ID > "=" source = EXP())
+    {      return new AssignmentStatement(target, source);    }    
+
+}
+
+PrintStatement PRINTSTMT():
+{
+   Expression exp;
+
+}
+{
+ ("P " exp = EXP())
+ {
+   return new PrintStatement(exp); //needs a Java file
+ }
+ 
+}
+
+ReturnStatement RETURNSTMT():
+{
+   Expression exp;
+}
+{
+ ("R" exp = EXP())
+ {
+   return new ReturnStatement(exp); //needs a Java file
+ }
+ 
+} 
 
 // ---------------------------------
 // DEC -> VARDEC | FUNCDEC
@@ -422,42 +460,10 @@ Expression EXP5(): {
     Expression e1;
     Expression e2;
 }{
-    (op = PREFIX())? e = EXP6()
+    (op = PREFIXOP())? e = EXP6()
     {return op == null ? e : new UnaryExpression(op, e);}
 }
 
-// ---------------------
-// EXP9 -> PREFIX* EXP10
-// ---------------------
-
-Expression EXP9(): {
-    String op = null;
-    Expression e;
-}{
-    (op = PREFIX())? e = EXP10()
-    {return op == null ? e : new UnaryExpression(op, e);}
-}
-
-// ----------------------------------------
-// EXP10 -> EXP11 SUFFIX*
-// SUFFIX -> '(' EXPLIST? ')' | '[' EXP ']'
-// ----------------------------------------
-
-Expression EXP10(): {
-    Expression e;
-    List<Expression> args = new ArrayList<Expression>();
-    Expression subscript;
-}{
-    e = EXP11()
-    (
-        "(" (args = EXPLIST())? ")"
-        {e = new FunctionCall(e, args);}
-    |
-        "[" subscript = EXP() "]"
-        {e = new SubscriptExpression(e, subscript);}
-    )*
-    {return e;}
-}
 
 // -------------------------
 // EXP6 -> BOOL | NUMLIT | STRLIT | ID | '(' EXP ')' | EXP '[' EXP ']' | ID ARGS
@@ -469,13 +475,13 @@ Expression EXP6(): {
     Token t;
 }{
     (
-        e = BOOL()
+        e = < BOOL >
         {return e;}
     |
-        e = NUMLIT()
+        e = < NUMLIT >
         {return e;}
     |
-        e = STRLIT()
+        e = < STRLIT >
         {return e;}
     |
         t = <ID>

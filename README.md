@@ -196,7 +196,7 @@ SYNTAX IN PROGRESS
     PARAMS        →  '(' ID (ID ',')* ')'
     ASSIGNMENT    →  ID '=' EXP
     PRINTSTMT     →  'P' EXP
-    RETURNSTMT    →  'R' (EXP | BOOL | ID)
+    RETURNSTMT    →  'R' EXP
     CONDITIONAL   →  'I' EXP BLOCK ('EF' EXP BLOCK)* ('E' BLOCK)?
     ARRAYLOOKUP   →  ID'['NUMLIT']'
     LOOP          →  'LU' EXP BR BLOCK
