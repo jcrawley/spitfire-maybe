@@ -48,8 +48,7 @@ SKIP: {
 TOKEN: {
     "I" | "EI" | "E" | "DF" | "DC" | "L" | "R" | "B"
     | "N" | "S" | "C" | "Y" | "< >" | "T" | "F" | "P" | "LU" | "LF"
-    | "LW"
-    | ":" | "," | "+" | "-" | "*" | "/" | "==" | "^"
+    | "LW"| ":" | "," | "+" | "-" | "*" | "/" | "==" | "^"
     | "<" | "<=" | "=" | ">=" | ">" | "(" | ")" | "[" | "]"
 |
     < BR: "\n" | "\r" | "\r\n" >
@@ -254,6 +253,8 @@ String TYPE(): {
     {return builder.toString();}
 }
 
+// Do we need to remove the following commented code? - TM
+
 // ----------------------------------
 // PROCDEC -> to ID PARAMS? BLOCK end
 // ----------------------------------
@@ -319,7 +320,6 @@ Block BLOCK(): {
     {return new Block(statements);}
 }
 
-
 // ------------------------------------------------------------------
 // CONDITIONAL -> 'I' EXP BLOCK ('EF' EXP BLOCK)* ('E' BLOCK)?
 // ------------------------------------------------------------------
@@ -351,6 +351,7 @@ Statement CONDITIONAL(): {
 //             |  for each ID in EXP (to EXP (by EXP)?)?
 // -----------------------------------------------------
 //needs more work
+
 Statement LOOP(): {
     Token t = null;
     Expression e = null;
@@ -455,6 +456,7 @@ Expression EXP4(): {
     )*
     {return e1;}
 }
+
 // --------------------------
 // EXP5 -> PREFIXOP? EXP6
 // --------------------------
@@ -512,6 +514,9 @@ Expression EXP7():{	Expression e2 = null;
     
   )
 }
+
+
+// Do the following comments need to be deleted since it isn't in our language? - TM
 
 /*// ------------------
 // LITERAL -> nothing
