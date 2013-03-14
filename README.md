@@ -12,7 +12,7 @@ SPITFIRE ON THE LEFT, JAVASCRIPT ON THE RIGHT
 
 **VARIABLE DECLARATIONS**
 
-Variable declarations are simple and easy in Spitfire. No semicolons necessary! A list of types in Spitfire can be found below.
+Variable declarations are simple and easy in Spitfire. No semicolons necessary! A list of types in Spitfire can be found lower in the `README.md`.
 
     S s = "spitfire" 					        var s = "spit"; 
     B found = T                                 var found = true;
@@ -33,9 +33,9 @@ In Spitfire constants start with `_`. Uppercase identifier names are not allowed
     N _pi = 3.14 				                var pi = 3.14;
     
 
-*8ASSIGNMENT IS MOST CERTAINLY NOT INITIALIZATION**
+**ASSIGNMENT IS MOST CERTAINLY NOT INITIALIZATION**
 
-In Spitfire, you can assign variables to other values if you so choose, It is exampled below.
+In Spitfire, you can assign variables to other values if you so choose. It is exampled below.
 
     N x = 1 					                var x = 1;
     x = x + 1 					                x = x + 1;
@@ -83,7 +83,9 @@ Function calls in Spitfire will work as shown below. A return type is optional i
       R x % y == 0 ? x : gcd(y, x % y)              return x%y == 0 ? x : gcd(y, x%y); 
                                                 }
                                                                   
-**KEYWORDS*8
+**KEYWORDS**
+
+Spitfire's keywords are short and simple. Maxing out at two characters, the short and sweet style saves you keystrokes.
 
     I					                	if 
     E				                		else 
@@ -109,15 +111,23 @@ In Spitfire, there are five main types: `B` is for booleans, `N` is for any type
     
 **CLASSES**
 
+Classes in Spitfire are very simple. After naming the class, you simply need to state which variables you want to be associated with the class.
+
     DC point
       N x
       N y
       S color
       
-    point p = point.new(4,5,"purple")
+    point a = point[4, 5, "purple"]
+    point b = point[-3, 0, "red"]
+    point c = point[12, -9, "orange]
+    
+    [point] vertices = [a, b, c]
     
     DC polygon
       [point] vertices
+      
+    polygon triangle = polygon[vertices]
       
 **NUMBERS AND THEIR TYPES**
 
