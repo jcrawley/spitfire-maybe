@@ -4,15 +4,15 @@ Spitfire is a language that allows the user to implement solutions as fast as po
 
 --------------------------------
 
-### Examples
+#Examples
 
-SPITFIRE ON THE LEFT, JAVASCRIPT ON THE RIGHT
+**SPITFIRE ON THE LEFT, JAVASCRIPT ON THE RIGHT**
 
     P “Hello, world!”             	            console.log(“Hello, world!”);
 
 **VARIABLE DECLARATIONS**
 
-Variable declarations are simple and easy in Spitfire. No semicolons necessary! A list of types in Spitfire can be found below.
+Variable declarations are simple and easy in Spitfire. No semicolons necessary! A list of types in Spitfire can be found lower in the `README.md`.
 
     S s = "spitfire" 					        var s = "spit"; 
     B found = T                                 var found = true;
@@ -33,9 +33,9 @@ In Spitfire constants start with `_`. Uppercase identifier names are not allowed
     N _pi = 3.14 				                var pi = 3.14;
     
 
-*8ASSIGNMENT IS MOST CERTAINLY NOT INITIALIZATION**
+**ASSIGNMENT IS MOST CERTAINLY NOT INITIALIZATION**
 
-In Spitfire, you can assign variables to other values if you so choose, It is exampled below.
+In Spitfire, you can assign variables to other values if you so choose. It is exampled below.
 
     N x = 1 					                var x = 1;
     x = x + 1 					                x = x + 1;
@@ -83,7 +83,9 @@ Function calls in Spitfire will work as shown below. A return type is optional i
       R x % y == 0 ? x : gcd(y, x % y)              return x%y == 0 ? x : gcd(y, x%y); 
                                                 }
                                                                   
-**KEYWORDS*8
+**KEYWORDS**
+
+Spitfire's keywords are short and simple. Maxing out at two characters, the short and sweet style saves you keystrokes.
 
     I					                	if 
     E				                		else 
@@ -109,15 +111,23 @@ In Spitfire, there are five main types: `B` is for booleans, `N` is for any type
     
 **CLASSES**
 
+Classes in Spitfire are very simple. After naming the class, you simply need to state which variables you want to be associated with the class.
+
     DC point
       N x
       N y
       S color
       
-    point p = point.new(4,5,"purple")
+    point a = point[4, 5, "purple"]
+    point b = point[-3, 0, "red"]
+    point c = point[12, -9, "orange]
+    
+    [point] vertices = [a, b, c]
     
     DC polygon
       [point] vertices
+      
+    polygon triangle = polygon[vertices]
       
 **NUMBERS AND THEIR TYPES**
 
@@ -129,13 +139,25 @@ Numbers in Spitfire can be denoted as octal, hexadecimal, or decimal. Octal numb
 
 **STRINGS AND STRING MANIPULATION**
 
+Strings in Spitfire are easy to manipulate and use. Many ways or manipulating string in Spitfire use thses brackets: `[` and `]`. For a certain slice of a string, one can specify which part by viewing the string as an array of characters. Let us use `i` and `j` to describe how this works. `i` will be the beginning index and `j` to denote the end index. If a user puts `[i-j]` after a string, the slice of the string, not including `j`, will be returned. If a user simply puts `[i-]`, the slice will be from the beginning index until the end of the string. More information on arrays is listed below.
+
     S s = "Hello” + “world!” 	            var s = “Hello” + “world!”; 
     “Hello, world!" | " "                   “Hello, world!”.split(“ ");
-    [“Spit”,”fire"] @ "-"                   [“Spit”, “fire”].join(“”);
-    “Spitfire”.l                            "Spitfire".length(); 
-    “Spitfire is quick”.f("i")              "Spitfire is quick".indexOf("i"); // .pos .ix				
-    “2”.num                                 parseInt("2");
-    3.str                                   3 .toString();
+    [“Spit”,”fire"] @ ""                    [“Spit”, “fire”].join(“”);
+    S s = “Spitfire”[3-5]                   var s = "Spitfire".slice(3,6);
+    S f = "Spitfire"[3-]
+    “Spitfire is quick”["i"]                "Spitfire is quick".indexOf("i"); // .pos .ix				
+    
+**TYPECASTING**
+
+In Spitfire, users can typecast any variable into another by simply putting brackets around the type you wish the variable to become after the variable.
+    
+    “2”[N]                                 parseInt("2");
+    3[S]                                   3 .toString();
+    C a = '8'                              var a = 'c';
+    S b = a[S]                             var b = String.valueOf(c);
+    S c = "f"                              var c = "f";
+    C d = c[C]                             var d = c.charAt(0);
 
 **LOOPS**
 
@@ -185,10 +207,12 @@ Spitfire's arrays are just like any other languages but with some spice. Array d
     N n = 78                                var n = 78;
     p <= n                                  p.push(n);
     P p[-1]					                console.log(p[p.length-1]);
-    [N] q = p					            var q = p;
+    [N] q = p[0-2]					        var q = p;
     [Y] a = [88, false, “0001”, green]		var a = [88, false, “0001”, green]; 
 
 **SYNTAX**
+
+Here is the syntax for Spitfire. Our EBNF symbols are as follows: `|` is for alternatives, `*` is zero or more, `+` is for one or more, `?` is for zero or one, and parentheses are for groups.
 
     SCRIPT        →  (STMT BR)+
     STMT          →  DEC
@@ -202,14 +226,14 @@ Spitfire's arrays are just like any other languages but with some spice. Array d
     TYPE          →  'B' | 'N' | 'C' | 'S' | 'Y' | ID | '<>' | '[' TYPE ']'
     VARDEC        →  TYPE ID (ID)* '=' EXP (EXP)*
     FUNDEC        →  'DF' ID ARGS BR BLOCK
-    CLASSDEC      →  'DC' ID BR                 //unfinished
+    CLASSDEC      →  'DC' ID BR BLOCK
     PARAMS        →  '(' ID (ID ',')* ')'
     ASSIGNMENT    →  ID '=' EXP
     PRINTSTMT     →  'P' EXP
     RETURNSTMT    →  'R' EXP
     CONDITIONAL   →  'I' EXP BLOCK ('EF' EXP BLOCK)* ('E' BLOCK)?
     ARRAYLOOKUP   →  ID'['NUMLIT']'
-    LOOP          →  'LU' EXP BR BLOCK
+    LOOP          →  'LU' NUMLIT BR BLOCK
                   →  'LF' ID EXP EXP EXP? BR BLOCK
                   →  'LW' EXP BR BLOCK
     EXP           →  EXP1 ('||' EXP1)*
