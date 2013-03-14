@@ -296,16 +296,8 @@ void PARAMS(List<Variable> params): {
     String t;
     Token p;
 }{
-    t = TYPE() p = <ID>
-    {params.add(new Variable(p.image, t, null, false));}
-    (
-        LOOKAHEAD(2) "," t = TYPE() p = <ID>
-        {params.add(new Variable(p.image, t, null, false));}
-    )*
-    (
-        (",")? "and" t = TYPE() p = <ID>
-        {params.add(new Variable(p.image, t, null, false));}
-    )?
+    "(" p = < ID >    { params.add(new Variable(p));    }
+    (      p = < ID > ","      {        params.add(new Variable(p));      }      )* ")"
 }
 
 // ----------------------
