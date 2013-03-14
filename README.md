@@ -26,14 +26,14 @@ Spitfire allows parallel declaration. simply put a space between the variables y
     S s f = "spit" "fire" 				        var s = "spit";
     						                    var f = "fire";
 
-CONSTANTS
+**CONSTANTS**
 
 In Spitfire constants start with `_`. Uppercase identifier names are not allowed.
 
     N _pi = 3.14 				                var pi = 3.14;
     
 
-ASSIGNMENT IS MOST CERTAINLY NOT INITIALIZATION
+*8ASSIGNMENT IS MOST CERTAINLY NOT INITIALIZATION**
 
 In Spitfire, you can assign variables to other values if you so choose, It is exampled below.
 
@@ -41,13 +41,13 @@ In Spitfire, you can assign variables to other values if you so choose, It is ex
     x = x + 1 					                x = x + 1;
     P x                                         console.log(x);
 
-ARITHMETIC EXPRESSIONS
+**ARITHMETIC EXPRESSIONS**
 
 Arithmetic expressions work similarly to most languages. Spitfire allows both `^` and `**` for denoting powers.
 
     ((3 / 2) - (a * b)) ^ ((300 % c) + d ** 2)	((3 / 2) - (a * b)) ^ ((300 % c) + d ** 2)	
 
-SWAP
+**SWAP**
 
 Spitfire allows its user to swap two variables by using `<=>`. It is demonstrated below. The types of the two variables that are being switched do not need to be the same.
 
@@ -58,7 +58,7 @@ Spitfire allows its user to swap two variables by using `<=>`. It is demonstrate
                                                 x = _2;
                                                 y = _1;
 
-BOOLEANS AND BOOLEAN ARITHMETIC
+**BOOLEANS AND BOOLEAN ARITHMETIC**
 
 In Spitfire, true and false are denoted by `T` and `F` respectively. Spitfire also has the boolean conditional statement with `?` and `:`.
 
@@ -67,7 +67,7 @@ In Spitfire, true and false are denoted by `T` and `F` respectively. Spitfire al
     S s = T || F ? "spit" : "fire"				var s = true || false ? "spit : "fire";              
     T && F                                      true && false
 
-FUNCTIONS
+**FUNCTIONS**
 
 Function calls in Spitfire will work as shown below. A return type is optional in Spitfire. If nothing is provided after the function name, the function is assumed to return void.
 
@@ -83,8 +83,7 @@ Function calls in Spitfire will work as shown below. A return type is optional i
       R x % y == 0 ? x : gcd(y, x % y)              return x%y == 0 ? x : gcd(y, x%y); 
                                                 }
                                                                   
-
-KEYWORDS
+**KEYWORDS*8
 
     I					                	if 
     E				                		else 
@@ -96,7 +95,7 @@ KEYWORDS
     LW                                      while loop
     R                                       return
 
-TYPES 
+**TYPES**
 
 In Spitfire, there are five main types: `B` is for booleans, `N` is for any type of number (integer and floating point numbers work), `S` is for strings, `C` is for characters, and `<>` for the null type. `[]` is used for array declarations and `Y` is used to denote arrays with multiple types of elements.
 
@@ -108,7 +107,7 @@ In Spitfire, there are five main types: `B` is for booleans, `N` is for any type
     []		                				array
     Y                                       "any" type
     
-CLASSES
+**CLASSES**
 
     DC point
       N x
@@ -120,13 +119,15 @@ CLASSES
     DC polygon
       [point] vertices
       
-NUMBERS AND THIER TYPES
-                        
-    N h = 0x267AC1                          var h = 0x267AC1;
-    N o = 0337                              var o = 0337;
-    N n = 135792468                         var n = 135792468;
+**NUMBERS AND THEIR TYPES**
 
-STRINGS AND STRING MANIPULATION
+Numbers in Spitfire can be denoted as octal, hexadecimal, or decimal. Octal numbers are prefixed with a `0` and hexadecimal numbers are prefixed with a `0x`. Decimal numbers have no prefix.
+                        
+    N o = 0337                              var o = 0337;
+    N h = 0x267AC1                          var h = 0x267AC1;
+    N d = 135792468                         var d = 135792468;
+
+**STRINGS AND STRING MANIPULATION**
 
     S s = "Hello” + “world!” 	            var s = “Hello” + “world!”; 
     “Hello, world!" | " "                   “Hello, world!”.split(“ ");
@@ -136,7 +137,7 @@ STRINGS AND STRING MANIPULATION
     “2”.num                                 parseInt("2");
     3.str                                   3 .toString();
 
-LOOPS
+**LOOPS**
 
 Spitfire includes three different types of loops: `LU` is loop until, `LF` is loop for, and `LW` is loop while. `LU` is a simplified `for` loop that will iterate through the code that the user provides `n` amount of times. `LF` works just like any `for` loop. The user would provide an identifier of their choice for initialization, the starting index, the ending index (the condition for each iteration), and an afterthought (which can be positive or negative). Lastly, we have `LW` which will iterate through the body of code that a user provides as long as their given boolean expression is `true`. Below are some examples:
  
@@ -176,7 +177,7 @@ Spitfire includes three different types of loops: `LU` is loop until, `LF` is lo
                                                 console.log(x);
                                             }
 
-ARRAYS
+**ARRAYS**
 
 Spitfire's arrays are just like any other languages but with some spice. Array declarations are used by having a left hand bracket `[` followed by one of Spitfire's type declarations followed by a right hand bracket `]`. For arrays of multiple types, the user cany use the type `Y` denoting "any" type. To access the last position in an array the user can use the index `-1` just like in Ruby. Also, a user can append an element to the end of an array by using `<=`. Some examples are listed below:
 
@@ -187,7 +188,7 @@ Spitfire's arrays are just like any other languages but with some spice. Array d
     [N] q = p					            var q = p;
     [Y] a = [88, false, “0001”, green]		var a = [88, false, “0001”, green]; 
 
-SYNTAX IN PROGRESS
+**SYNTAX**
 
     SCRIPT        →  (STMT BR)+
     STMT          →  DEC
@@ -226,7 +227,7 @@ SYNTAX IN PROGRESS
     BLOCK         →  (STMT BR)+
     ARGS          →  '('EXP (EXP ',')* ')' | '()' 
 
-MICROSYNTAX
+**MICROSYNTAX**
     
     BR            → NEWLINE
     COMMENT       → '$' ()*  NEWLINE
