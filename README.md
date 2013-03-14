@@ -10,7 +10,7 @@ SPITFIRE ON THE LEFT, JAVASCRIPT ON THE RIGHT
 
     P “Hello, world!”             	            console.log(“Hello, world!”);
 
-VARIABLE DECLARATIONS
+**VARIABLE DECLARATIONS**
 
 Variable declarations are simple and easy in Spitfire. No semicolons necessary! A list of types in Spitfire can be found below.
 
@@ -19,7 +19,7 @@ Variable declarations are simple and easy in Spitfire. No semicolons necessary! 
     N hex = 0x34A4                              var hex = 0x34A4;
     C f = 'f'                                   var f = 'f';
 
-PARALLEL DECLARATION
+**PARALLEL DECLARATION**
 
 Spitfire allows parallel declaration. simply put a space between the variables you want to declare, and a space between the values you want the variables to be inititialized to.
 
