@@ -565,11 +565,11 @@ Expression EXP7():
 Literal LITERAL(): {
     Token t;
 }{
-    "nothing" {return NullLiteral.INSTANCE;}
+    "<>" {return NullLiteral.INSTANCE;}
 |
-    "yes" {return BooleanLiteral.TRUE;}
+    "T" {return BooleanLiteral.TRUE;}
 |
-    "no" {return BooleanLiteral.FALSE;}
+    "F" {return BooleanLiteral.FALSE;}
 |
     t = <INTLIT> {return new WholeNumberLiteral(t.image);}
 |
