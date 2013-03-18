@@ -558,9 +558,9 @@ Procedure PROCDEC(): {
     Expression e2;
     e1 = EXP3();
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case 29:
     case 31:
     case 32:
-    case 33:
     case 34:
     case 35:
     case 54:
@@ -732,11 +732,11 @@ Procedure PROCDEC(): {
 Literal LITERAL(): {
     Token t;
 }{
-    "nothing" {return NullLiteral.INSTANCE;}
+    "<>" {return NullLiteral.INSTANCE;}
 |
-    "yes" {return BooleanLiteral.TRUE;}
+    "T" {return BooleanLiteral.TRUE;}
 |
-    "no" {return BooleanLiteral.FALSE;}
+    "F" {return BooleanLiteral.FALSE;}
 |
     t = <INTLIT> {return new WholeNumberLiteral(t.image);}
 |
@@ -774,9 +774,9 @@ List<Expression> EXPLIST(): {
       jj_consume_token(32);
           {if (true) return "<=";}
       break;
-    case 33:
-      jj_consume_token(33);
-         {if (true) return "=";}
+    case 29:
+      jj_consume_token(29);
+          {if (true) return "==";}
       break;
     case 54:
       jj_consume_token(54);
@@ -838,7 +838,7 @@ List<Expression> EXPLIST(): {
       t = jj_consume_token(30);
       break;
     case 56:
-      jj_consume_token(56);
+      t = jj_consume_token(56);
       break;
     default:
       jj_la1[23] = jj_gen;
@@ -905,10 +905,10 @@ List<Expression> EXPLIST(): {
       jj_la1_init_1();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x4000000,0x4700490,0x80,0x0,0x401f800,0x1f800,0x0,0x0,0x0,0x4700490,0x40,0x4000000,0x700000,0x0,0x0,0x80000000,0x6000000,0x58000000,0x4000000,0x0,0x0,0x80000000,0x6000000,0x58000000,0x4000000,};
+      jj_la1_0 = new int[] {0x4000000,0x4700490,0x80,0x0,0x401f800,0x1f800,0x0,0x0,0x0,0x4700490,0x40,0x4000000,0x700000,0x0,0x0,0xa0000000,0x6000000,0x58000000,0x4000000,0x0,0x0,0xa0000000,0x6000000,0x58000000,0x4000000,};
    }
    private static void jj_la1_init_1() {
-      jj_la1_1 = new int[] {0x6007210,0x6027210,0x2000,0x40000,0x6047250,0x2040,0x10,0x2000,0x100,0x6027210,0x0,0x6007210,0x0,0x100000,0x200000,0x40000f,0x0,0x1800000,0x6000000,0x7210,0x7200,0x40000f,0x0,0x1800000,0x6000000,};
+      jj_la1_1 = new int[] {0x6007210,0x6027210,0x2000,0x40000,0x6047250,0x2040,0x10,0x2000,0x100,0x6027210,0x0,0x6007210,0x0,0x100000,0x200000,0x40000d,0x0,0x1800000,0x6000000,0x7210,0x7200,0x40000d,0x0,0x1800000,0x6000000,};
    }
   final private JJCalls[] jj_2_rtns = new JJCalls[1];
   private boolean jj_rescan = false;
