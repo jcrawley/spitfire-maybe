@@ -9,7 +9,11 @@ options {
     STATIC = false;
 }
 
-PARSER_BEGIN(Parser)
+
+
+
+
+PARSER_BEGIN(SyntaxChecker)
 
 package edu.lmu.cs.xlg.manatee.syntax;
 
@@ -19,25 +23,22 @@ import java.io.Reader;
 import edu.lmu.cs.xlg.util.Log;
 import edu.lmu.cs.xlg.manatee.entities.*;
 
-public class Parser {
 
-    /**
-     * Returns the result of parsing the Manatee program on the given Reader.
-     */
-    public Script parse(Log log) {
+public class SyntaxChecker {
+    public static void main(String[] args) {
         try {
-            return SCRIPT();
-        } catch (TokenMgrError e) {
-            log.exception(e);
-            return null;
-        } catch (ParseException e) {
-            log.exception(e);
-            return null;
+            new SyntaxChecker(new java.io.StringReader(args[0])).S();
+            System.out.println("Syntax is okay");
+        } catch (Throwable e) {
+            // Catching Throwable is ugly but JavaCC throws Error objects!
+            System.out.println("Syntax check failed: " + e.getMessage());
         }
     }
 }
 
-PARSER_END(Parser)
+PARSER_END(SyntaxChecker)
+
+
 
 SKIP: {
     " " | "\t" | <"--" (~["\n","\r"])*>
@@ -147,9 +148,9 @@ Statement STMT(): {
     ModifiedStatement.Modifier m = null;
 }{
     (
-        s = DEC()
+        LOOKAHEAD(3)s = DEC()
     |
-        s = ASSIGNMENT()
+        LOOKAHEAD(2)s = ASSIGNMENT()
     |
         s = PRINTSTMT() 
     |
@@ -157,7 +158,7 @@ Statement STMT(): {
     |
         s = LOOP() 
     |
-        s = EXP()
+        LOOKAHEAD(3)s = EXP()
     | 
         s = RETURNSTMT()
     )
@@ -236,9 +237,9 @@ Variable VARDEC(): {
 }{
     v = <ID>
     (
-        ("_" {constant = true;})? e = EXP()
+        LOOKAHEAD(2)("_" {constant = true;})? e = EXP()
     |
-         (t = TYPE())
+        LOOKAHEAD(2) (t = TYPE())
     )
     {return new Variable(v.image, t, e, constant);} // needs to be made spitfire
 }
@@ -463,7 +464,7 @@ Expression EXP3(): {
     Expression e1;
     Expression e2;
 }{
-    e1 = EXP4()
+    LOOKAHEAD(2) e1 = EXP4()
     (
         op = ADDOP()
         e2 = EXP4()
@@ -514,13 +515,11 @@ Expression EXP6(): {
     Token t;
 }{
     (
-        e = EXP7()
+        LOOKAHEAD(2) e = EXP7() 
         {return e;}
+
     |
-        t = <ID>
-        {return new IdentifierExpression(t.image);}
-    |
-       e2 = EXP7() "[" e = EXP7() "]"
+        LOOKAHEAD(2) e2 = EXP7() "[" e = EXP7() "]"
         {return new ArrayConstructor(expressions);} //need to fix
     |
         "(" e = EXP7() ")"

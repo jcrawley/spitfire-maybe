@@ -1,6 +1,6 @@
 package edu.lmu.cs.xlg.manatee.entities;
-
 import edu.lmu.cs.xlg.util.Log;
+
 
 /**
  * An expression made up of an operator and two operands.
