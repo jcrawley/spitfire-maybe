@@ -349,7 +349,7 @@ Block BLOCK(): {
     List<Statement> statements = new ArrayList<Statement>();
     Statement s;
 }{
-    ":" (<BR>)+ ( s = STMT() {statements.add(s);} )+
+    ":" (<BR>)+ (LOOKAHEAD(2) s = STMT() {statements.add(s);} )+
     {return new Block(statements);}
 }
 
@@ -371,7 +371,7 @@ Statement CONDITIONAL(): {
         {arms.add(new ConditionalStatement.Arm(e, b));}
     )*
     (
-        "E" elseBlock = BLOCK()
+       LOOKAHEAD(2) "E" elseBlock = BLOCK()
     )?
     //"end"
     {return new ConditionalStatement(arms, elseBlock);}
@@ -464,8 +464,8 @@ Expression EXP3(): {
     Expression e1;
     Expression e2;
 }{
-    LOOKAHEAD(2) e1 = EXP4()
-    (
+   e1 = EXP4()
+    (LOOKAHEAD(3)
         op = ADDOP()
         e2 = EXP4()
         {e1 = new BinaryExpression(e1, op, e2);}
