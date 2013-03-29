@@ -8,7 +8,7 @@ import java.io.Reader;
 import edu.lmu.cs.xlg.manatee.entities.Script;
 import edu.lmu.cs.xlg.manatee.entities.SymbolTable;
 import edu.lmu.cs.xlg.manatee.generators.Generator;
-import edu.lmu.cs.xlg.manatee.syntax.Parser;
+import edu.lmu.cs.xlg.manatee.target.generated-sources.javacc.edu.lmu.cs.xlg.manatee.syntax;
 import edu.lmu.cs.xlg.util.Log;
 
 /**
