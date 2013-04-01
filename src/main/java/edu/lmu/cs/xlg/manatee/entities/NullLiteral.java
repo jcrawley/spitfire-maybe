@@ -10,7 +10,7 @@ public class NullLiteral extends Literal {
     public static NullLiteral INSTANCE = new NullLiteral();
 
     private NullLiteral() {
-        super("nothing");
+        super("<>");
     }
 
     /**
