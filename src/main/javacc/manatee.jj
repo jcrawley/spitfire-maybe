@@ -397,29 +397,37 @@ Statement LOOP(): {
     )
 }
 
-// ----------------------
-// EXP -> EXP1 (or EXP1)*
-// ----------------------
+// ------------------------
+// EXP -> EXP1 ('||' EXP1)*
+// ------------------------
 
 Expression EXP(): {
     Expression e1;
     Expression e2;
 }{
     e1 = EXP1()
-    ("||" e2 = EXP1() {e1 = new BinaryExpression(e1, "||", e2);})*
+    (
+        "||"
+        e2 = EXP1()
+        {e1 = new BinaryExpression(e1, "||", e2);}
+    )*
     {return e1;}
 }
 
-// ------------------------
-// EXP1 -> EXP2 (and EXP2)*
-// ------------------------
+// -------------------------
+// EXP1 -> EXP2 ('&&' EXP2)*
+// -------------------------
 
 Expression EXP1(): {
     Expression e1;
     Expression e2;
 }{
     e1 = EXP2()
-    ("&&" e2 = EXP2() {e1 = new BinaryExpression(e1, "and", e2);})*
+    (
+        "&&"
+        e2 = EXP2()
+        {e1 = new BinaryExpression(e1, "&&", e2);}
+    )*
     {return e1;}
 }
 
@@ -437,25 +445,24 @@ Expression EXP2(): {
         op = RELOP()
         e2 = EXP3()
         {e1 = new BinaryExpression(e1, op, e2);}
-    )?
+    )*
     {return e1;}
 }
 
-// ----------------------------
-// EXP3 -> EXP4 (ADDOP EXP4)?
-// ----------------------------
+// --------------------------
+// EXP3 -> EXP4 (ADDOP EXP4)*
+// --------------------------
 
 Expression EXP3(): {
     String op;
-    Expression e1;
-    Expression e2;
+    Expression e1, e2;
 }{
-   e1 = EXP4()
-    (LOOKAHEAD(3)
+    e1 = EXP4()
+    (
         op = ADDOP()
         e2 = EXP4()
         {e1 = new BinaryExpression(e1, op, e2);}
-    )?
+    )*
     {return e1;}
 }
 
@@ -476,9 +483,9 @@ Expression EXP4(): {
     {return e1;}
 }
 
-// --------------------------
+// ----------------------
 // EXP5 -> PREFIXOP? EXP6
-// --------------------------
+// ----------------------
 
 Expression EXP5(): {
     String op;
@@ -488,55 +495,38 @@ Expression EXP5(): {
     {return op == null ? e : new UnaryExpression(op, e);}
 }
 
-
-// -------------------------
-// EXP6 -> BOOL | NUMLIT | STRLIT | ID | '(' EXP ')' | EXP '[' EXP ']' | ID ARGS
-// -------------------------
+// -------------------------------------------------------
+// EXP6 -> 'T' | 'F' | NUMLIT | STRLIT | VAR | '(' EXP ')'
+// -------------------------------------------------------
 
 Expression EXP6(): {
     List<Expression> expressions = new ArrayList<Expression>();
     Expression e = null;
-    Expression e2 = null;
     Token t;
 }{
-    (
-        LOOKAHEAD(2) e = EXP7()
-        {return e;}
-
-    |
-        LOOKAHEAD(2) e2 = EXP7() "[" e = EXP7() "]"
-        {return new ArrayConstructor(expressions);} //need to fix
-    |
-        "(" e = EXP7() ")"
-        {return e;}
-    )
+    "<>" {return NullLiteral.INSTANCE;}
+|
+    "T" {return BooleanLiteral.TRUE;}
+|
+    "F" {return BooleanLiteral.FALSE;}
+|
+    t = <INTLIT> {return new WholeNumberLiteral(t.image);}
+|
+    t = <NUMLIT> {return new NumberLiteral(t.image);}
+|
+    t = <CHARLIT> {return new CharacterLiteral(t.image);}
+|
+    t = <STRLIT> {return new StringLiteral(t.image);}
+|
+    v = VAR() {return new VariableReference(v);}
+|
+    "(" e = EXP() ")" {return e;}
 }
 
-Expression EXP7():
-{
-    Expression e = null;
-    Token t;
-}{
-    (
-        t = "T"
-        {return BooleanLiteral.TRUE;}
-    |
-        t = "F"
-        {return BooleanLiteral.FALSE;}
-    |
-        e = < NUMLIT >
-        {return e;}
-    |
-        e = < STRLIT >
-        {return e;}
-    |
-        t = <ID>
-        {return new IdentifierExpression(t.image);}
-  )
-}
+// -------------------------------------------
+// VAREXP -> ID ('[' EXP ']' | '.' ID | ARGS)*
+// -------------------------------------------
 
-
-// Do the following comments need to be deleted since it isn't in our language? - TM
 
 /*// ------------------
 // LITERAL -> nothing
@@ -547,6 +537,12 @@ Expression EXP7():
 //         |  CHARLIT
 //         |  STRLIT
 // ------------------
+
+        LOOKAHEAD(2) e2 = EXP7() "[" e = EXP7() "]"
+        {return new ArrayConstructor(expressions);} //need to fix
+
+
+
 
 Literal LITERAL(): {
     Token t;
@@ -580,40 +576,30 @@ List<Expression> EXPLIST(): {
 }
 */
 
-// ------------------------------------------------------
-// RELOP -> '<' | '<=' | '==' | '!=' | '>=' | '>' |
-// ------------------------------------------------------
+// ----------------------------------------------
+// RELOP -> '<' | '<=' | '==' | '!=' | '>=' | '>'
+// ----------------------------------------------
 
 String RELOP(): {
 }{
-    "<" {return "<";}
-    |
-    "<=" {return "<=";}
-    |
-    "==" {return "==";}
-    |
-    "!=" {return "!=";}
-    |
-    ">=" {return ">=";}
-    |
-    ">" {return ">";}
-
-}
-
-// -----------------------
-// ADDOP -> '+' | '-' |
-// -----------------------
-
-String ADDOP(): {
-    Token t;
-}{
-    (t = "+" | t = "-" )
+    (t = "<" | t = "<=" | t = "==" | t = "!=" | t = ">=" | t = ">")
     {return t.image;}
 }
 
 // ------------------
-// '*' | '/' | '%' | '^' | '**'
+// ADDOP -> '+' | '-'
 // ------------------
+
+String ADDOP(): {
+    Token t;
+}{
+    (t = "+" | t = "-")
+    {return t.image;}
+}
+
+// -------------------------------------
+// MULOP -> '*' | '/' | '%' | '^' | '**'
+// -------------------------------------
 
 String MULOP(): {
     Token t;
@@ -622,9 +608,9 @@ String MULOP(): {
     {return t.image;}
 }
 
-// -------------------------------
-// PREFIX -> '-' | "!" | "~"
-// -------------------------------
+// ---------------------------
+// PREFIXOP -> '-' | "!" | "~"
+// ---------------------------
 
 String PREFIXOP(): {
     Token t;
