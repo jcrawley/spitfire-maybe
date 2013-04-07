@@ -220,7 +220,6 @@ Here is the syntax for Spitfire. Our EBNF symbols are as follows: `|` is for alt
                   |  PRINTSTMT
                   |  CONDITIONAL
                   |  LOOP
-                  |  EXP
                   |  RETURNSTMT
     DEC           →  VARDEC | FUNDEC | CLASSDEC
     TYPE          →  'B' | 'N' | 'C' | 'S' | 'Y' | ID | '<>' | '[' TYPE ']'
@@ -232,18 +231,17 @@ Here is the syntax for Spitfire. Our EBNF symbols are as follows: `|` is for alt
     PRINTSTMT     →  'P' EXP
     RETURNSTMT    →  'R' EXP
     CONDITIONAL   →  'I' EXP BLOCK ('EF' EXP BLOCK)* ('E' BLOCK)?
-    ARRAYLOOKUP   →  ID'['NUMLIT']'
     LOOP          →  'LU' NUMLIT BR BLOCK
                   →  'LF' ID EXP EXP EXP? BR BLOCK
                   →  'LW' EXP BR BLOCK
     EXP           →  EXP1 ('||' EXP1)*
     EXP1          →  EXP2 ('&&' EXP2)*
     EXP2          →  EXP3 (RELOP EXP3)?
-    EXP3          →  EXP4 (ADDOP EXP4)?
-    EXP4          →  EXP5 (MULOP EXP5)?
+    EXP3          →  EXP4 (ADDOP EXP4)*
+    EXP4          →  EXP5 (MULOP EXP5)*
     EXP5          →  PREFIXOP? EXP6
-    EXP6          →  BOOL | NUMLIT | STRLIT | ID | '(' EXP ')' | EXP '[' EXP ']' | ID ARGS
-    BOOL          →  'T' | 'F'
+    EXP6          →  'T' | 'F' | NUMLIT | STRLIT | VAR | '(' EXP ')'
+    VAR           →  ID ('[' EXP ']' | '.' ID | ARGS)*
     ADDOP         →  '+' | '-'
     MULOP         →  '*' | '/' | '%' | '^' | '**'
     RELOP         →  '<' | '<=' | '==' | '!=' | '>=' | '>'
