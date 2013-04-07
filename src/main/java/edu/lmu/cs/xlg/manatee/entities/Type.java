@@ -7,11 +7,11 @@ import edu.lmu.cs.xlg.util.Log;
  */
 public class Type extends Declaration {
 
-    public static final Type WHOLE_NUMBER = new Type("whole number");
     public static final Type NUMBER = new Type("number");
-    public static final Type TRUTH_VALUE = new Type("truth value");
+    public static final Type BOOLEAN = new Type("boolean");
     public static final Type CHARACTER = new Type("character");
     public static final Type STRING = new Type("string");
+    public static final Type ANY = new Type("any");
 
     /**
      * An internal type for functions.
@@ -58,15 +58,15 @@ public class Type extends Declaration {
      * Returns whether this type is an arithmetic type.
      */
     public boolean isPrimitive() {
-        return this == WHOLE_NUMBER || this == NUMBER || this == CHARACTER
-            || this == STRING || this == TRUTH_VALUE || this == ARBITRARY;
+        return this == BOOLEAN || this == NUMBER || this == CHARACTER
+            || this == STRING || this == BOOLEAN || this == ARBITRARY;
     }
 
     /**
      * Returns whether this type is an arithmetic type.
      */
     public boolean isArithmetic() {
-        return this == WHOLE_NUMBER || this == NUMBER || this == ARBITRARY;
+        return this == NUMBER || this == ARBITRARY;
     }
 
     /**
@@ -85,7 +85,6 @@ public class Type extends Declaration {
      */
     public boolean canBeAssignedTo(Type that) {
         return this == that
-        || this == WHOLE_NUMBER && that == NUMBER
         || this == NULL_TYPE && that.isReference()
         || this == ARBITRARY_ARRAY && that instanceof ArrayType
         || this == ARBITRARY

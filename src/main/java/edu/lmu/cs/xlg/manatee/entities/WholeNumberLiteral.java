@@ -20,7 +20,7 @@ public class WholeNumberLiteral extends Literal {
 
     @Override
     public void analyze(Log log, SymbolTable table, Subroutine owner, boolean inLoop) {
-        type = Type.WHOLE_NUMBER;
+        type = Type.NUMBER;
 
         // Let Java do the work of determining whether the lexeme describes a valid 2s-complement
         // integer literal; after all, whole number literals in Manatee are exactly like integer

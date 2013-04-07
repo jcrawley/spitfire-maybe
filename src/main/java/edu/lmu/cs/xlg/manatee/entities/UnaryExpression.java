@@ -38,7 +38,7 @@ public class UnaryExpression extends Expression {
 
         if ("not".equals(op)) {
             operand.assertBoolean(op, log);
-            type = Type.TRUTH_VALUE;
+            type = Type.BOOLEAN;
 
         } else if ("-".equals(op)) {
             operand.assertArithmetic(op, log);
@@ -46,7 +46,7 @@ public class UnaryExpression extends Expression {
 
         } else if ("length".equals(op)) {
             operand.assertArrayOrString(op, log);
-            type = Type.WHOLE_NUMBER;
+            type = Type.BOOLEAN;
 
         } else {
             throw new RuntimeException("Internal error in unary expression analysis");

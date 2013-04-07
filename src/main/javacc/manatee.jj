@@ -45,7 +45,7 @@ SKIP: {
 TOKEN: {
     "I" | "EI" | "E" | "DF" | "DC" | "L" | "R" | "B"
     | "N" | "S" | "C" | "Y" | "< >" | "T" | "F" | "P" | "LU" | "LF"
-    | "LW"| ":" | "," | "+" | "-" | "*" | "/" | "==" | "^"
+    | "LW"| ":" | "," | "+" | "-" | "*" | "/" | "==" | "^" | "|" | "@" | "::"
     | "<" | "<=" | "=" | ">=" | ">" | "(" | ")" | "[" | "]"
 |
     < BR: "\n" | "\r" | "\r\n" >
@@ -105,25 +105,19 @@ Script SCRIPT(): {
 
 List<Expression> ARGS():
 {
-  List<Expression> arguments = new ArrayList<Expression >();
+  List<Expression> arguments = new ArrayList<Expression>();
   Expression e;
   Expression e1;
-}
-{
-  (
-    "(" e = EXP()
-    {
-      arguments.add(e);
-    }
+}{
     (
-      e1 = EXP() ","
-      {
-        arguments.add(e1);
-      }
-    )* ")"
-    {
-      return arguments;
-    })
+        LOOKAHEAD(2) "(" ")"
+    |
+        "("
+            e = EXP() {arguments.add(e);}
+            ("," e = EXP() {arguments.add(e);})*
+        ")"
+    )
+    {return arguments;}
 }
 
 // ---------------------------------------------------------------------
@@ -138,12 +132,11 @@ List<Expression> ARGS():
 
 Statement STMT(): {
     Statement s;
-    ModifiedStatement.Modifier m = null;
 }{
     (
-        LOOKAHEAD(3)s = DEC()
+        LOOKAHEAD(3) s = DEC()
     |
-        LOOKAHEAD(2)s = ASSIGNMENT()
+        LOOKAHEAD(2) s = ASSIGNMENT()
     |
         s = PRINTSTMT()
     |
@@ -156,48 +149,42 @@ Statement STMT(): {
     {return s;}
 }
 
-//----------------------------------
-// ASSIGNMENT    - >  ID '=' EXP
-//----------------------------------
+//-------------------------
+// ASSIGNMENT -> ID '=' EXP
+//-------------------------
 
 AssignmentStatement ASSIGNMENT():
 {
     Token t;
-    Expression target;
     Expression source;
-}
-{
+}{
     t = <ID> "=" source = EXP()
     {
       return new AssignmentStatement(new IdentifierExpression(t.image), source);
     }
 }
 
+//---------------------
+// PRINTSTMT -> 'P' EXP
+//---------------------
+
 PrintStatement PRINTSTMT():
 {
-   Expression exp;
-}
-{
-    ("P " exp = EXP())
-    {
-        return new PrintStatement(exp);
-    }
+   Expression e;
+}{
+    ("P" e = EXP()) {return new PrintStatement(e);}
 }
 
 ReturnStatement RETURNSTMT():
 {
-    Expression exp;
-}
-{
-    ("R" exp = EXP())
-    {
-        return new ReturnStatement(exp); //needs a Java file
-    }
+    Expression e;
+}{
+    ("R" e = EXP()) {return new ReturnStatement(e);}
 }
 
-// ---------------------------------
+// -----------------------
 // DEC -> VARDEC | FUNCDEC
-// ---------------------------------
+// -----------------------
 
 Statement DEC(): {
     Statement s;
@@ -210,107 +197,65 @@ Statement DEC(): {
     {return s;}
 }
 
-// --------------------------------
+// -------------------------
 // VARDEC -> TYPE ID '=' EXP
-// --------------------------------
+// -------------------------
 
 Variable VARDEC(): {
     String i = null;
-    String t = null;
+    Type t = null;
     Token v = null;
     Expression e = null;
     boolean constant = false;
 }{
-    v = <ID>
-    (
-        LOOKAHEAD(2)("_" {constant = true;})? e = EXP()
-    |
-        LOOKAHEAD(2) (t = TYPE())
-    )
-    {return new Variable(v.image, t, e, constant);} // needs to be made spitfire
+    t = TYPE() v = <ID> "=" e = EXP()
+    {return new Variable(v.image, t, e);}
 }
 
-// ---------------------
-// TYPE -> truth value
-//     |  character
-//     |  whole? number
-//     |  string
-//     |  TYPE list
-// ---------------------
+// --------------------------------------------------------------
+// TYPE -> 'B' | 'N' | 'C' | 'S' | 'Y' | ID | '<>' | '[' TYPE ']'
+// --------------------------------------------------------------
 
-String TYPE(): {
-    String t;
-    Token tok;
-    StringBuilder builder = new StringBuilder();
+Type TYPE(): {
+    Token t;
+    Type type;
 }{
     (
-        "B" {t = "boolean";}
+        "B" {return Type.BOOLEAN;}
     |
-        "C" {t = "character";}
+        "C" {return Type.CHARACTER;}
     |
-        "S" {t = "String";}
+        "S" {return Type.STRING;}
     |
-        "Y" {t = "any";}
+        "Y" {return Type.ANY;}
     |
-        "N" {t = "number";}
+        "N" {return Type.NUMBER;}
     |
-      < ID >
-      {
-        t = "object";
-      }
+        t = <ID> {return new NamedType(t.image);}
     |
-     "< >"
-     {
-       t = "null";
-     }
-|
-    "[" TYPE() "]"
-    {
-      t = "array";
-    }
+        "<>" {return Type.NULL_TYPE;}
+    |
+        "[" type = TYPE() "]" {return new ArrayType(type);}
     )
-    {builder.append(t);}
-    {return builder.toString();}
 }
 
-// Do we need to remove the following commented code? - TM
-
-// ----------------------------------
-// PROCDEC -> to ID PARAMS? BLOCK end
-// ----------------------------------
-/*
-Procedure PROCDEC(): {
-    Token name;
-    List<Variable> params = new ArrayList<Variable>();
-    Block body;
-}{
-    "to" name = <ID> (PARAMS(params))? body = BLOCK() "end"
-    {return new Procedure(name.image, params, body);}
-}
-*/
-
-// ----------------------------------------------------------------------
-// FUNDEC -> 'DF' ID ARGS BR BLOCK
-// ----------------------------------------------------------------------
+// ---------------------------------
+// FUNDEC -> 'DF' ID PARAMS BR BLOCK
+// ---------------------------------
 
 Function FUNDEC(): {
     String type;
     Token name;
     List<Variable> params = new ArrayList<Variable>();
     Block body;
-
 }{
-    "DF"
-    name = <ID>
-    (ARGS())?
-
-    body = BLOCK()
+    "DF" name = <ID> (PARAMS(params))? body = BLOCK()
     {return new Function(type, name.image, params, body);}
 }
 
-// ----------------------------------------------------
-// PARAMS -> '(' ID (ID ',')* ')'
-// ----------------------------------------------------
+// ----------------------------------------
+// PARAMS -> '(' TYPE ID (',' TYPE ID)* ')'
+// ----------------------------------------
 
 void PARAMS(List<Variable> params): {
     String t;
@@ -339,9 +284,9 @@ Block BLOCK(): {
     {return new Block(statements);}
 }
 
-// ------------------------------------------------------------------
-// CONDITIONAL -> 'I' EXP BLOCK ('EF' EXP BLOCK)* ('E' BLOCK)?
-// ------------------------------------------------------------------
+// -----------------------------------------------------------
+// CONDITIONAL -> 'I' EXP BLOCK ('EI' EXP BLOCK)* ('E' BLOCK)?
+// -----------------------------------------------------------
 
 Statement CONDITIONAL(): {
     ConditionalStatement.Arm arm;
@@ -379,7 +324,7 @@ Statement LOOP(): {
     Block b;
 }{
     (
-        "LU" (e = EXP())< BR > b = BLOCK()
+        "LU" (e = EXP()) <BR> b = BLOCK()
         {return e == null ? new PlainLoop(b) : new TimesLoop(e, b);}
     |
         "LW" e = EXP() b = BLOCK()
@@ -495,12 +440,31 @@ Expression EXP5(): {
     {return op == null ? e : new UnaryExpression(op, e);}
 }
 
-// -------------------------------------------------------
-// EXP6 -> 'T' | 'F' | NUMLIT | STRLIT | VAR | '(' EXP ')'
-// -------------------------------------------------------
+// -----------------------------------------------
+// EXP6 -> EXP7 ('::' TYPE | '@' EXP7 | '|' EXP7)?
+// -----------------------------------------------
 
 Expression EXP6(): {
-    List<Expression> expressions = new ArrayList<Expression>();
+    Expression e1, e2;
+    Type t;
+}{
+    e1 = EXP7()
+    (
+        "::" t = TYPE() {e1 = new CastExpression(e1, t);}
+    |
+        "@" e2 = EXP7() {e1 = new BinaryExpression(e1, "@", e2);}
+    |
+        "|" e2 = EXP7() {e1 = new BinaryExpression(e1, "|", e2);}
+    )?
+    {return e1;}
+}
+
+// -----------------------------------------------------------------
+// EXP7 -> 'T' | 'F' | NUMLIT | CHARLIT | STRLIT | VAR | '(' EXP ')'
+// -----------------------------------------------------------------
+
+Expression EXP7(): {
+    VariableExpression v;
     Expression e = null;
     Token t;
 }{
@@ -510,15 +474,13 @@ Expression EXP6(): {
 |
     "F" {return BooleanLiteral.FALSE;}
 |
-    t = <INTLIT> {return new WholeNumberLiteral(t.image);}
-|
     t = <NUMLIT> {return new NumberLiteral(t.image);}
 |
     t = <CHARLIT> {return new CharacterLiteral(t.image);}
 |
     t = <STRLIT> {return new StringLiteral(t.image);}
 |
-    v = VAR() {return new VariableReference(v);}
+    v = VAREXP() {return new VariableExpression(v);}
 |
     "(" e = EXP() ")" {return e;}
 }
@@ -527,60 +489,29 @@ Expression EXP6(): {
 // VAREXP -> ID ('[' EXP ']' | '.' ID | ARGS)*
 // -------------------------------------------
 
-
-/*// ------------------
-// LITERAL -> nothing
-//         |  yes
-//         |  no
-//         |  INTLIT
-//         |  NUMLIT
-//         |  CHARLIT
-//         |  STRLIT
-// ------------------
-
-        LOOKAHEAD(2) e2 = EXP7() "[" e = EXP7() "]"
-        {return new ArrayConstructor(expressions);} //need to fix
-
-
-
-
-Literal LITERAL(): {
+VariableExpression VAREXP(): {
+    VariableExpression v;
     Token t;
-}{
-    "<>" {return NullLiteral.INSTANCE;}
-|
-    "T" {return BooleanLiteral.TRUE;}
-|
-    "F" {return BooleanLiteral.FALSE;}
-|
-    t = <INTLIT> {return new WholeNumberLiteral(t.image);}
-|
-    t = <NUMLIT> {return new NumberLiteral(t.image);}
-|
-    t = <CHARLIT> {return new CharacterLiteral(t.image);}
-|
-    t = <STRLIT> {return new StringLiteral(t.image);}
-}
-
-// -------------------------
-// EXPLIST -> EXP (',' EXP)*
-// -------------------------
-
-List<Expression> EXPLIST(): {
-    List<Expression> expressions = new ArrayList<Expression>();
     Expression e;
+    List<Expression> args;
 }{
-    e = EXP() {expressions.add(e);}
-    ("," e = EXP() {expressions.add(e);})*
-    {return expressions;}
+    t = <ID> {v = new SimpleVariableExpression(t.image);}
+    (
+        "[" e = EXP() "]" {v = new SubscriptExpression(v, e);}
+    |
+        "." t = <ID> {v = new DotExpression(v, t.image);}
+    |
+        args = ARGS() {v = new FunctionCall(v, args);}
+    )*
+    {return v;}
 }
-*/
 
 // ----------------------------------------------
 // RELOP -> '<' | '<=' | '==' | '!=' | '>=' | '>'
 // ----------------------------------------------
 
 String RELOP(): {
+    Token t;
 }{
     (t = "<" | t = "<=" | t = "==" | t = "!=" | t = ">=" | t = ">")
     {return t.image;}

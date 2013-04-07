@@ -57,25 +57,25 @@ public abstract class Expression extends Entity {
     }
 
     void assertArithmetic(String context, Log log) {
-        if (!(type == Type.WHOLE_NUMBER || type == Type.NUMBER)) {
+        if (type != Type.NUMBER) {
             log.error("non.arithmetic", context);
         }
     }
 
     void assertArithmeticOrChar(String context, Log log) {
-        if (!(type == Type.WHOLE_NUMBER || type == Type.NUMBER || type == Type.CHARACTER)) {
+        if (!(type == Type.NUMBER || type == Type.CHARACTER)) {
             log.error("non.arithmetic.or.char", context, type);
         }
     }
 
     void assertInteger(String context, Log log) {
-        if (!(type == Type.WHOLE_NUMBER)) {
+        if (!(type == Type.NUMBER)) {
             log.error("non.integer", context, type);
         }
     }
 
     void assertBoolean(String context, Log log) {
-        if (!(type == Type.TRUTH_VALUE)) {
+        if (!(type == Type.BOOLEAN)) {
             log.error("non.boolean", context, type);
         }
     }

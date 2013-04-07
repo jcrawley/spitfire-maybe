@@ -55,14 +55,13 @@ public class BinaryExpression extends Expression {
         } else if (op.matches("[-+*/]")) {
             left.assertArithmetic(op, log);
             right.assertArithmetic(op, log);
-            type = (left.type == Type.NUMBER || right.type == Type.NUMBER)
-                ? Type.NUMBER : Type.WHOLE_NUMBER;
+            type = Type.NUMBER;
 
         // int op int returning int (for shifts and mod)
         } else if (op.matches("<<|>>")) {
             left.assertInteger(op, log);
             right.assertInteger(op, log);
-            type = Type.WHOLE_NUMBER;
+            type = Type.NUMBER;
 
         // char/num/str op char/num/str (for greater/less inequalities)
         } else if (op.matches("<|<=|>|>=")) {
@@ -74,22 +73,22 @@ public class BinaryExpression extends Expression {
                 left.assertArithmetic(op, log);
                 right.assertArithmetic(op, log);
             }
-            type = Type.TRUTH_VALUE;
+            type = Type.BOOLEAN;
 
         // equals or not equals on primitives
-        } else if (op.matches("=|≠")) {
+        } else if (op.matches("=|!=")) {
             if (!(left.type.isPrimitive() &&
                     (left.isCompatibleWith(right.type) || right.isCompatibleWith(left.type)))) {
                 log.error("eq.type.error", op, left.type, right.type);
             }
-            type = Type.TRUTH_VALUE;
+            type = Type.BOOLEAN;
 
         // bool and bool
         // bool or bool
         } else if (op.matches("and|or")) {
             left.assertBoolean(op, log);
             right.assertBoolean(op, log);
-            type = Type.TRUTH_VALUE;
+            type = Type.BOOLEAN;
 
         // char in string
         // t in t list
@@ -101,7 +100,7 @@ public class BinaryExpression extends Expression {
                 assert(left.getType().canBeAssignedTo(
                     ArrayType.class.cast(right.getType()).getBaseType()));
             }
-            type = Type.TRUTH_VALUE;
+            type = Type.BOOLEAN;
 
         // ref is ref
         // ref is not ref
@@ -112,7 +111,7 @@ public class BinaryExpression extends Expression {
             if (left.getType() != right.getType()) {
                 log.error("type.mismatch", op);
             }
-            type = Type.TRUTH_VALUE;
+            type = Type.BOOLEAN;
 
         } else {
             throw new RuntimeException("Internal error in binary expression analysis");

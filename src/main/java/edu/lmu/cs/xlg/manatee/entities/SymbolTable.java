@@ -48,14 +48,12 @@ public class SymbolTable extends Entity {
 
         if ("string".equals(name)) {
             return Type.STRING;
-        } else if ("whole number".equals(name)) {
-            return Type.WHOLE_NUMBER;
         } else if ("number".equals(name)) {
             return Type.NUMBER;
         } else if ("character".equals(name)) {
             return Type.CHARACTER;
         } else if ("truth value".equals(name)) {
-            return Type.TRUTH_VALUE;
+            return Type.BOOLEAN;
         }
 
         if (name.endsWith(" list")) {

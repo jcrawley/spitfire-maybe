@@ -19,11 +19,11 @@ public class Variable extends Declaration {
     /**
      * Constructs a variable.
      */
-    public Variable(String name, String typename, Expression initializer, boolean constant) {
+    public Variable(String name, Type type, Expression initializer) {
         super(name);
-        this.typename = typename;
+        this.type = type;
         this.initializer = initializer;
-        this.constant = constant;
+        this.constant = name.startsWith("_");
     }
 
     /**

@@ -60,7 +60,7 @@ public class RangeLoop extends Statement {
             step.assertInteger("range loop", log);
         }
         body.createTable(table);
-        iterator = new Variable(iteratorName, Type.WHOLE_NUMBER);
+        iterator = new Variable(iteratorName, Type.NUMBER);
         body.getTable().insert(iterator, log);
         body.analyze(log, table, owner, true);
     }
