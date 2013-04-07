@@ -1,17 +1,13 @@
 /*
- *  manatee.jj
+ *  spitfire.jj
  *
- *  A JavaCC specification for a subset of Manatee.
+ *  A JavaCC specification for Spitfire.
  */
 
 options {
     UNICODE_INPUT = true;
     STATIC = false;
 }
-
-
-
-
 
 PARSER_BEGIN(Parser)
 
@@ -25,30 +21,20 @@ import edu.lmu.cs.xlg.manatee.entities.*;
 
 
 public class Parser {
-    public static void main(String[] args) throws Exception {
-        Exp result = new Parser(new java.io.StringReader(args[0])).S();
-        System.out.println(result);
+    public Script parse(Reader reader, Log log) {
+        try {
+            return SCRIPT();
+        } catch (TokenMgrError e) {
+            log.exception(e);
+            return null;
+        } catch (ParseException e) {
+            log.exception(e);
+            return null;
+        }
     }
 }
 
-// Classes defining the Abstract Syntax Tree
-abstract class Exp {}
-class Num extends Exp {
-    int value;
-    Num(int v) {value = v;}
-    public String toString() {return value + "";}
-}
-class BinaryExp extends Exp {
-    String op;
-    Exp left, right;
-    BinaryExp(String o, Exp l, Exp r) {op = o; left = l; right = r;}
-    public String toString() {return "(" + op + " " + left + " " + right + ")";}
-}
-
-
 PARSER_END(Parser)
-
-
 
 SKIP: {
     " " | "\t" | <"--" (~["\n","\r"])*>
@@ -90,57 +76,54 @@ TOKEN: {
 |
     < ID: <LETTER> (<LETTER>|<DIGIT>|"_")* >
 |
-	< BOOL : ["T", "F"] >
-| 
     < #LETTER: [
-    "\u0061"-"\u007a"
+        "\u0061"-"\u007a"
     ] >
 |
     < #DIGIT: [
-    "\u0030"-"\u0039", "\u0660"-"\u0669", "\u06f0"-"\u06f9", "\u0966"-"\u096f", "\u09e6"-"\u09ef",
-    "\u0a66"-"\u0a6f", "\u0ae6"-"\u0aef", "\u0b66"-"\u0b6f", "\u0be7"-"\u0bef", "\u0c66"-"\u0c6f",
-    "\u0ce6"-"\u0cef", "\u0d66"-"\u0d6f", "\u0e50"-"\u0e59", "\u0ed0"-"\u0ed9", "\u0f20"-"\u0f29",
-    "\u1040"-"\u1049", "\u1369"-"\u1371", "\u17e0"-"\u17e9", "\u1810"-"\u1819", "\u1946"-"\u194f",
-    "\uff10"-"\uff19"
+        "\u0030"-"\u0039", "\u0660"-"\u0669", "\u06f0"-"\u06f9", "\u0966"-"\u096f", "\u09e6"-"\u09ef",
+        "\u0a66"-"\u0a6f", "\u0ae6"-"\u0aef", "\u0b66"-"\u0b6f", "\u0be7"-"\u0bef", "\u0c66"-"\u0c6f",
+        "\u0ce6"-"\u0cef", "\u0d66"-"\u0d6f", "\u0e50"-"\u0e59", "\u0ed0"-"\u0ed9", "\u0f20"-"\u0f29",
+        "\u1040"-"\u1049", "\u1369"-"\u1371", "\u17e0"-"\u17e9", "\u1810"-"\u1819", "\u1946"-"\u194f",
+        "\uff10"-"\uff19"
     ] >
 }
 
-// -------------------
-// SCRIPT ->  (STMT BR)+
-// -------------------
+// --------------------
+// SCRIPT -> (STMT BR)+
+// --------------------
 
 Script SCRIPT(): {
     List<Statement> statements = new ArrayList<Statement>();
     Statement s;
 }{
-    
-    (s = STMT() {statements.add(s);})(<BR>)
+
+    (s = STMT() {statements.add(s);} <BR>)+
     <EOF>
     {return new Script(statements);}
 }
 
-Arguments ARGS():
+List<Expression> ARGS():
 {
-	List<Expression > arguments = new ArrayList<Expression >();
-	Expression e;
-	Expression e1;
+  List<Expression> arguments = new ArrayList<Expression >();
+  Expression e;
+  Expression e1;
 }
 {
-	(
-	  "(" e = EXP()
-	  {
-	    arguments.add(e);
-	  }
-	  (
-	    e1 = EXP() ","
-	    {
-	      arguments.add(e1);
-	    }
-	  )* ")"
-	  {
-	    return new Arguments(arguments); //needs a Java file
-	  })
-	  
+  (
+    "(" e = EXP()
+    {
+      arguments.add(e);
+    }
+    (
+      e1 = EXP() ","
+      {
+        arguments.add(e1);
+      }
+    )* ")"
+    {
+      return arguments;
+    })
 }
 
 // ---------------------------------------------------------------------
@@ -162,14 +145,12 @@ Statement STMT(): {
     |
         LOOKAHEAD(2)s = ASSIGNMENT()
     |
-        s = PRINTSTMT() 
+        s = PRINTSTMT()
     |
-        s = CONDITIONAL() 
+        s = CONDITIONAL()
     |
-        s = LOOP() 
+        s = LOOP()
     |
-        LOOKAHEAD(3)s = EXP()
-    | 
         s = RETURNSTMT()
     )
     {return s;}
@@ -181,43 +162,38 @@ Statement STMT(): {
 
 AssignmentStatement ASSIGNMENT():
 {
-  Expression target;
-  Expression source;
+    Token t;
+    Expression target;
+    Expression source;
 }
 {
-  (
-    target = < ID > "=" source = EXP())
+    t = <ID> "=" source = EXP()
     {
-      return new AssignmentStatement(target, source);
+      return new AssignmentStatement(new IdentifierExpression(t.image), source);
     }
-    
-
 }
 
 PrintStatement PRINTSTMT():
 {
    Expression exp;
-
 }
 {
- ("P " exp = EXP())
- {
-   return new PrintStatement(exp); //needs a Java file
- }
- 
+    ("P " exp = EXP())
+    {
+        return new PrintStatement(exp);
+    }
 }
 
 ReturnStatement RETURNSTMT():
 {
-   Expression exp;
+    Expression exp;
 }
 {
- ("R" exp = EXP())
- {
-   return new ReturnStatement(exp); //needs a Java file
- }
- 
-} 
+    ("R" exp = EXP())
+    {
+        return new ReturnStatement(exp); //needs a Java file
+    }
+}
 
 // ---------------------------------
 // DEC -> VARDEC | FUNCDEC
@@ -278,20 +254,20 @@ String TYPE(): {
     |
         "N" {t = "number";}
     |
-  		< ID >
-  		{
-  		  t = "object";
-  		}
+      < ID >
+      {
+        t = "object";
+      }
     |
- 		"< >"
- 		{
- 		  t = "null";
- 		}
+     "< >"
+     {
+       t = "null";
+     }
 |
-		"[" TYPE() "]"
-		{
-		  t = "array";
-		}
+    "[" TYPE() "]"
+    {
+      t = "array";
+    }
     )
     {builder.append(t);}
     {return builder.toString();}
@@ -327,7 +303,7 @@ Function FUNDEC(): {
     "DF"
     name = <ID>
     (ARGS())?
-    
+
     body = BLOCK()
     {return new Function(type, name.image, params, body);}
 }
@@ -403,14 +379,14 @@ Statement LOOP(): {
     Block b;
 }{
     (
-        "LU" (e = EXP())< BR > b = BLOCK() 
+        "LU" (e = EXP())< BR > b = BLOCK()
         {return e == null ? new PlainLoop(b) : new TimesLoop(e, b);}
     |
-        "LW" e = EXP() b = BLOCK() 
+        "LW" e = EXP() b = BLOCK()
         {return new WhileLoop(e, b);}
     |
         "LF" t = <ID>  e = EXP() e2 = EXP() (e3 = EXP())? <BR> BLOCK()//???
-        b = BLOCK() 
+        b = BLOCK()
         {
             if (e3 == null) {
                 return new CollectionLoop(t.image, e,e2, b); //looping through objects
@@ -489,7 +465,7 @@ Expression EXP3(): {
 
 Expression EXP4(): {
     String op;
-    Expression e1;
+    Expression e1, e2;
 }{
     e1 = EXP5()
     (
@@ -506,8 +482,7 @@ Expression EXP4(): {
 
 Expression EXP5(): {
     String op;
-    Expression e1;
-    Expression e2;
+    Expression e;
 }{
     (op = PREFIXOP())? e = EXP6()
     {return op == null ? e : new UnaryExpression(op, e);}
@@ -525,7 +500,7 @@ Expression EXP6(): {
     Token t;
 }{
     (
-        LOOKAHEAD(2) e = EXP7() 
+        LOOKAHEAD(2) e = EXP7()
         {return e;}
 
     |
@@ -539,12 +514,15 @@ Expression EXP6(): {
 
 Expression EXP7():
 {
-	Expression e2 = null;
+    Expression e = null;
     Token t;
 }{
     (
-        e = < BOOL >
-        {return e;}
+        t = "T"
+        {return BooleanLiteral.TRUE;}
+    |
+        t = "F"
+        {return BooleanLiteral.FALSE;}
     |
         e = < NUMLIT >
         {return e;}
@@ -554,7 +532,6 @@ Expression EXP7():
     |
         t = <ID>
         {return new IdentifierExpression(t.image);}
-    
   )
 }
 
@@ -620,7 +597,7 @@ String RELOP(): {
     ">=" {return ">=";}
     |
     ">" {return ">";}
-  
+
 }
 
 // -----------------------
