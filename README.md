@@ -1,6 +1,6 @@
 # Spitfire (maybe)
 
-Spitfire is a language that allows the user to implement solutions as fast as possible using the least amount of keystones. Ain't nobody got time to type out whole words! Spitfire is statically and strongly typed. It is FORTRAN-esque in that all of its keywords are capitalized. One day in class, `jcrawley` said,  `"I want to make a language that spits fire."` On that fateful day, we knew we had our name.
+Spitfire is a language that allows the user to implement solutions as fast as possible using the least amount of keystrokes. Ain't nobody got time to type out whole words! Spitfire is statically and strongly typed. It is FORTRAN-esque in that all of its keywords are capitalized. One day in class, `jcrawley` said,  `"I want to make a language that spits fire."` On that fateful day, we knew we had our name.
 
 --------------------------------
 
@@ -12,7 +12,7 @@ Spitfire is a language that allows the user to implement solutions as fast as po
 
 **VARIABLE DECLARATIONS**
 
-Variable declarations are simple and easy in Spitfire. No semicolons necessary! A list of types in Spitfire can be found lower in the `README.md`.
+Variable declarations are simple and easy in Spitfire. No semicolons necessary!
 
     S s = "spitfire" 					        var s = "spit"; 
     B found = T                                 var found = true;
@@ -32,10 +32,9 @@ In Spitfire constants start with `_`. Uppercase identifier names are not allowed
 
     N _pi = 3.14 				                var pi = 3.14;
     
-
 **ASSIGNMENT IS MOST CERTAINLY NOT INITIALIZATION**
 
-In Spitfire, you can assign variables to other values if you so choose. It is exampled below.
+In Spitfire, assignment is as you would probably expect.
 
     N x = 1 					                var x = 1;
     x = x + 1 					                x = x + 1;
@@ -45,7 +44,7 @@ In Spitfire, you can assign variables to other values if you so choose. It is ex
 
 Arithmetic expressions work similarly to most languages. Spitfire allows both `^` and `**` for denoting powers.
 
-    ((3 / 2) - (a * b)) ^ ((300 % c) + d ** 2)	((3 / 2) - (a * b)) ^ ((300 % c) + d ** 2)	
+    (3/2 - (a * b)) ^ ((300 % c) + d ** 2)	    Math.pow(3/2 - a * b, (300 % c) + Math.pow(d,2))
 
 **SWAP**
 
@@ -71,7 +70,7 @@ In Spitfire, true and false are denoted by `T` and `F` respectively. Spitfire al
 
 Function calls in Spitfire will work as shown below. A return type is optional in Spitfire. If nothing is provided after the function name, the function is assumed to return void.
 
-    DF bmi N (pounds, inches)                   var bmi = function (pounds, inches) {
+    DF bmi N (N pounds, N inches)               var bmi = function (pounds, inches) {
       N _kilograms_per_pound = 0.45359237           var KILOGRAMS_PER_POUND = 0.45359237;
       N _meters_per_inch = 0.0254                   var METERS_PER_INCH = 0.0254;
       N kilos = pounds * _kilograms_per_pound       var kilos = pounds * KILOGRAMS_PER_POUND;
@@ -105,8 +104,8 @@ In Spitfire, there are five main types: `B` is for booleans, `N` is for any type
     N				                		number
     S		                				string 
     C			                			character
-    <>    		                			null
-    []		                				array
+    <>    		                			type of the null literal
+    []		                				array (e.g., [N] is array of number)
     Y                                       "any" type
     
 **CLASSES**
@@ -150,14 +149,14 @@ Strings in Spitfire are easy to manipulate and use. Many ways or manipulating st
     
 **TYPECASTING**
 
-In Spitfire, users can typecast any variable into another by simply putting brackets around the type you wish the variable to become after the variable.
+In Spitfire, users can typecast any expression with the `::` operator.
     
-    “2”[N]                                 parseInt("2");
-    3[S]                                   3 .toString();
+    “2”::N                                 parseInt("2");
+    3::S                                   3 .toString();
     C a = '8'                              var a = 'c';
-    S b = a[S]                             var b = String.valueOf(c);
+    S b = a::S                             var b = String.valueOf(c);
     S c = "f"                              var c = "f";
-    C d = c[C]                             var d = c.charAt(0);
+    C d = c::C                             var d = c.charAt(0);
 
 **LOOPS**
 
@@ -207,7 +206,7 @@ Spitfire's arrays are just like any other languages but with some spice. Array d
     N n = 78                                var n = 78;
     p <= n                                  p.push(n);
     P p[-1]					                console.log(p[p.length-1]);
-    [N] q = p[0-2]					        var q = p;
+    [N] q = p    					        var q = p;
     [Y] a = [88, false, “0001”, green]		var a = [88, false, “0001”, green]; 
 
 **SYNTAX**
@@ -218,20 +217,20 @@ Here is the syntax for Spitfire. Our EBNF symbols are as follows: `|` is for alt
     STMT          →  DEC
                   |  ASSIGNMENT
                   |  PRINTSTMT
+                  |  RETURNSTMT
                   |  CONDITIONAL
                   |  LOOP
-                  |  RETURNSTMT
     DEC           →  VARDEC | FUNDEC | CLASSDEC
     TYPE          →  'B' | 'N' | 'C' | 'S' | 'Y' | ID | '<>' | '[' TYPE ']'
     VARDEC        →  TYPE ID (ID)* '=' EXP (EXP)*
-    FUNDEC        →  'DF' ID ARGS BR BLOCK
-    CLASSDEC      →  'DC' ID BR BLOCK
+    FUNDEC        →  'DF' ID PARAMS BR BLOCK
+    CLASSDEC      →  'DC' ID BR VARDEC+
     PARAMS        →  '(' ID (ID ',')* ')'
     ASSIGNMENT    →  ID '=' EXP
     PRINTSTMT     →  'P' EXP
     RETURNSTMT    →  'R' EXP
-    CONDITIONAL   →  'I' EXP BLOCK ('EF' EXP BLOCK)* ('E' BLOCK)?
-    LOOP          →  'LU' NUMLIT BR BLOCK
+    CONDITIONAL   →  'I' EXP BLOCK ('EI' EXP BLOCK)* ('E' BLOCK)?
+    LOOP          →  'LU' EXP BR BLOCK
                   →  'LF' ID EXP EXP EXP? BR BLOCK
                   →  'LW' EXP BR BLOCK
     EXP           →  EXP1 ('||' EXP1)*
@@ -240,14 +239,16 @@ Here is the syntax for Spitfire. Our EBNF symbols are as follows: `|` is for alt
     EXP3          →  EXP4 (ADDOP EXP4)*
     EXP4          →  EXP5 (MULOP EXP5)*
     EXP5          →  PREFIXOP? EXP6
-    EXP6          →  'T' | 'F' | NUMLIT | STRLIT | VAR | '(' EXP ')'
-    VAR           →  ID ('[' EXP ']' | '.' ID | ARGS)*
+    EXP6          →  EXP7 ('::' TYPE | '@' EXP7 | '|' EXP7)?
+    EXP7          →  'T' | 'F' | NUMLIT | STRLIT | VAREXP | '(' EXP ')'
+    VAREXP        →  ID ('[' EXP ']' | '.' ID | ARGS)*
     ADDOP         →  '+' | '-'
     MULOP         →  '*' | '/' | '%' | '^' | '**'
     RELOP         →  '<' | '<=' | '==' | '!=' | '>=' | '>'
-    PREFIXOP      →  '-' | '!' | '~' | 'char' | 'int' | 'string' | 'length'
-    BLOCK         →  (STMT BR)+
-    ARGS          →  '('EXP (EXP ',')* ')' | '()' 
+    PREFIXOP      →  '-' | '!' | '~'
+    BLOCK         →  (STMT BR+)+
+    PARAMS        →  '(' ')' | '(' TYPE ID (',' TYPE ID)* ')'
+    ARGS          →  '(' ')' | '(' EXP (',' EXP)* ')'
 
 **MICROSYNTAX**
     
