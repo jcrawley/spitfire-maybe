@@ -306,10 +306,9 @@ Statement CONDITIONAL(): {
 }
 
 // -----------------------------------------------------
-// LOOP        -> LOOPCONTROL BLOCK end
-// LOOPCONTROL -> loop (EXP times)?
-//             |  while EXP
-//             |  for each ID in EXP (to EXP (by EXP)?)?
+// LOOP ->  	| 'LU' EXP BR BLOCK
+//       		| 'LF' ID EXP EXP EXP? BR BLOCK
+//              | 'LW' EXP BR BLOCK
 // -----------------------------------------------------
 //needs more work
 
