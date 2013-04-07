@@ -202,11 +202,9 @@ Statement DEC(): {
 // -------------------------
 
 Variable VARDEC(): {
-    String i = null;
     Type t = null;
     Token v = null;
     Expression e = null;
-    boolean constant = false;
 }{
     t = TYPE() v = <ID> "=" e = EXP()
     {return new Variable(v.image, t, e);}
@@ -244,32 +242,31 @@ Type TYPE(): {
 // ---------------------------------
 
 Function FUNDEC(): {
-    String type;
+    Type type;
     Token name;
     List<Variable> params = new ArrayList<Variable>();
     Block body;
 }{
-    "DF" name = <ID> (PARAMS(params))? body = BLOCK()
+    "DF" type = TYPE() name = <ID> (PARAMS(params))? body = BLOCK()
     {return new Function(type, name.image, params, body);}
 }
 
-// ----------------------------------------
-// PARAMS -> '(' TYPE ID (',' TYPE ID)* ')'
-// ----------------------------------------
+// --------------------------------------------------
+// PARAMS -> '(' ')' | '(' TYPE ID (',' TYPE ID)* ')'
+// --------------------------------------------------
 
 void PARAMS(List<Variable> params): {
-    String t;
+    Type t;
     Token p;
 }{
-    "(" p = < ID >
-    { params.add(new Variable(p));
-    }
     (
-      p = < ID > ","
-      {
-        params.add(new Variable(p));
-      }
-      )* ")"
+        LOOKAHEAD(2) "(" ")"
+    |
+        "("
+            t = TYPE() p = <ID> {params.add(new Variable(p.image, t, null));}
+            ("," t = TYPE() p = <ID> {params.add(new Variable(p.image, t, null));})*
+        ")"
+    )
 }
 
 // ----------------------
@@ -334,7 +331,7 @@ Statement LOOP(): {
         b = BLOCK()
         {
             if (e3 == null) {
-                return new CollectionLoop(t.image, e,e2, b); //looping through objects
+                return new CollectionLoop(t.image, e, b); //looping through objects
             } else {
                 return new RangeLoop(t.image, e, e2, e3, b); //regular for loop
             }
@@ -433,7 +430,7 @@ Expression EXP4(): {
 // ----------------------
 
 Expression EXP5(): {
-    String op;
+    String op = null;
     Expression e;
 }{
     (op = PREFIXOP())? e = EXP6()
@@ -480,7 +477,7 @@ Expression EXP7(): {
 |
     t = <STRLIT> {return new StringLiteral(t.image);}
 |
-    v = VAREXP() {return new VariableExpression(v);}
+    v = VAREXP() {return v;}
 |
     "(" e = EXP() ")" {return e;}
 }
@@ -495,7 +492,7 @@ VariableExpression VAREXP(): {
     Expression e;
     List<Expression> args;
 }{
-    t = <ID> {v = new SimpleVariableExpression(t.image);}
+    t = <ID> {v = new IdentifierExpression(t.image);}
     (
         "[" e = EXP() "]" {v = new SubscriptExpression(v, e);}
     |

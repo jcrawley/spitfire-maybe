@@ -8,6 +8,7 @@ import java.io.Reader;
 import edu.lmu.cs.xlg.manatee.entities.Script;
 import edu.lmu.cs.xlg.manatee.entities.SymbolTable;
 import edu.lmu.cs.xlg.manatee.generators.Generator;
+import edu.lmu.cs.xlg.manatee.syntax.Parser;
 import edu.lmu.cs.xlg.util.Log;
 
 /**
@@ -86,7 +87,7 @@ public class Compiler {
         Parser parser = new Parser(reader);
         try {
             log.message("syntax.checking");
-            return parser.parse(log);
+            return parser.parse(reader, log);
         } finally {
             reader.close();
         }

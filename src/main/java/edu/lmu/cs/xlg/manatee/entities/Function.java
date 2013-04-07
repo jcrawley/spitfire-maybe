@@ -9,16 +9,10 @@ import edu.lmu.cs.xlg.util.Log;
  */
 public class Function extends Subroutine {
 
-    private String returnTypeName;
     private Type returnType;
 
-    public Function(String returnTypeName, String name, List<Variable> parameters, Block body) {
+    public Function(Type returnType, String name, List<Variable> parameters, Block body) {
         super(name, parameters, body);
-        this.returnTypeName = returnTypeName;
-    }
-
-    public String getReturnTypeName() {
-        return returnTypeName;
     }
 
     public Type getReturnType() {
@@ -27,7 +21,7 @@ public class Function extends Subroutine {
 
     @Override
     public void analyzeSignature(Log log, SymbolTable table, Subroutine owner, boolean inLoop) {
-        returnType = table.lookupType(returnTypeName, log);
+        // TODO: Analyze type
         super.analyzeSignature(log, table, owner, inLoop);
     }
 }

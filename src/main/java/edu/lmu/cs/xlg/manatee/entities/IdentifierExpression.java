@@ -3,10 +3,9 @@ package edu.lmu.cs.xlg.manatee.entities;
 import edu.lmu.cs.xlg.util.Log;
 
 /**
- * An expression consisting of a single identifier, a referencing occurrence to a variable or a
- * function.
+ * An expression consisting of a single identifier referencing a variable.
  */
-public class IdentifierExpression extends Expression {
+public class IdentifierExpression extends VariableExpression {
 
     private String name;
     private Entity referent;

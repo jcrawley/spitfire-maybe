@@ -2,12 +2,12 @@ package edu.lmu.cs.xlg.manatee.entities;
 
 import edu.lmu.cs.xlg.util.Log;
 
-public class SubscriptExpression extends Expression {
+public class SubscriptExpression extends VariableExpression {
 
     private Expression collection;
     private Expression index;
 
-    public SubscriptExpression(Expression base, Expression index) {
+    public SubscriptExpression(VariableExpression base, Expression index) {
         this.collection = base;
         this.index = index;
     }
