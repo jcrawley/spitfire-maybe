@@ -8,13 +8,15 @@ Spitfire is a language that allows the user to implement solutions as fast as po
 
 **SPITFIRE ON THE LEFT, JAVASCRIPT ON THE RIGHT**
 
+Bet you knew what the first example would be.
+
     P “Hello, world!”             	            console.log(“Hello, world!”);
 
 **VARIABLE DECLARATIONS**
 
 Variable declarations are simple and easy in Spitfire. No semicolons necessary!
 
-    S s = "spitfire" 					        var s = "spit"; 
+    S s = "spitfire" 					        var s = "spitfire"; 
     B found = T                                 var found = true;
     N hex = 0x34A4                              var hex = 0x34A4;
     C f = 'f'                                   var f = 'f';
@@ -70,7 +72,7 @@ In Spitfire, true and false are denoted by `T` and `F` respectively. Spitfire al
 
 Function calls in Spitfire will work as shown below. A return type is optional in Spitfire. If nothing is provided after the function name, the function is assumed to return void.
 
-    DF bmi N (N pounds, N inches)               var bmi = function (pounds, inches) {
+    DF N bmi (N pounds, N inches)               var bmi = function (pounds, inches) {
       N _kilograms_per_pound = 0.45359237           var KILOGRAMS_PER_POUND = 0.45359237;
       N _meters_per_inch = 0.0254                   var METERS_PER_INCH = 0.0254;
       N kilos = pounds * _kilograms_per_pound       var kilos = pounds * KILOGRAMS_PER_POUND;
@@ -78,7 +80,7 @@ Function calls in Spitfire will work as shown below. A return type is optional i
       R kilos / (meters * meters)                   return kilos / (meters * meters)
                                                 }
         
-    DF gcd N (x, y)                             var gcd = function (x, y) {
+    DF N gcd (x, y)                             var gcd = function (x, y) {
       R x % y == 0 ? x : gcd(y, x % y)              return x%y == 0 ? x : gcd(y, x%y); 
                                                 }
                                                                   
@@ -117,16 +119,18 @@ Classes in Spitfire are very simple. After naming the class, you simply need to 
       N y
       S color
       
-    point a = point[4, 5, "purple"]
-    point b = point[-3, 0, "red"]
-    point c = point[12, -9, "orange]
+Class names automatically become constructor functions, taking as arguments the fields in the order that they were declared:
+
+    point a = point(4, 5, "purple")
+    point b = point(-3, 0, "red")
+    point c = point(12, -9, "orange)
     
-    [point] vertices = [a, b, c]
+    [point] myPoints = [a, b, c]
     
     DC polygon
       [point] vertices
       
-    polygon triangle = polygon[vertices]
+    polygon triangle = polygon(myPoints)
       
 **NUMBERS AND THEIR TYPES**
 
@@ -138,14 +142,15 @@ Numbers in Spitfire can be denoted as octal, hexadecimal, or decimal. Octal numb
 
 **STRINGS AND STRING MANIPULATION**
 
-Strings in Spitfire are easy to manipulate and use. Many ways or manipulating string in Spitfire use thses brackets: `[` and `]`. For a certain slice of a string, one can specify which part by viewing the string as an array of characters. Let us use `i` and `j` to describe how this works. `i` will be the beginning index and `j` to denote the end index. If a user puts `[i-j]` after a string, the slice of the string, not including `j`, will be returned. If a user simply puts `[i-]`, the slice will be from the beginning index until the end of the string. More information on arrays is listed below.
+Strings in Spitfire are easy to manipulate and use. Many ways of manipulating string in Spitfire use thses brackets: `[` and `]`. For a certain slice of a string, one can specify which part by viewing the string as an array of characters. Let us use `i` and `j` to describe how this works. `i` will be the beginning index and `j` to denote the end index. If a user puts `[i..j]` after a string, the slice of the string, not including `j`, will be returned. If a user simply puts `[i..]`, the slice will be from the beginning index until the end of the string.
 
     S s = "Hello” + “world!” 	            var s = “Hello” + “world!”; 
     “Hello, world!" | " "                   “Hello, world!”.split(“ ");
     [“Spit”,”fire"] @ ""                    [“Spit”, “fire”].join(“”);
-    S s = “Spitfire”[3-5]                   var s = "Spitfire".slice(3,6);
-    S f = "Spitfire"[3-]
-    “Spitfire is quick”["i"]                "Spitfire is quick".indexOf("i"); // .pos .ix				
+    S s = “Spitfire”[3..5]                  var s = "Spitfire".slice(3,6);
+    S f = "Spitfire"[3..]                   var f = "Spitfire".slice(3);
+    “Spitfire is quick” % "is"              "Spitfire is quick".indexOf("is");  // 10
+    “Spitfire is quick”[4]                  "Spitfire is quick"[4]              // 'f'
     
 **TYPECASTING**
 
@@ -160,9 +165,13 @@ In Spitfire, users can typecast any expression with the `::` operator.
 
 **LOOPS**
 
-Spitfire includes three different types of loops: `LU` is loop until, `LF` is loop for, and `LW` is loop while. `LU` is a simplified `for` loop that will iterate through the code that the user provides `n` amount of times. `LF` works just like any `for` loop. The user would provide an identifier of their choice for initialization, the starting index, the ending index (the condition for each iteration), and an afterthought (which can be positive or negative). Lastly, we have `LW` which will iterate through the body of code that a user provides as long as their given boolean expression is `true`. Below are some examples:
+Spitfire includes three different types of loops: `L` to loop a fixed number of times, or forever; `LU` to loop until and expression is true, `LF` to loop for elements in a range or sequence, and `LW` to loop while an expression is true.
  
-    LU 5                                    for (var i = 0; i <5; i++) {
+    L                                       while (true) {
+      P "make it stop"                          console.log("make it stop");
+                                            }
+      
+    L 5                                     for (var i = 0; i < 5; i++) {
       P i                                       console.log(i);                                          
                                             }
                                             
@@ -230,8 +239,9 @@ Here is the syntax for Spitfire. Our EBNF symbols are as follows: `|` is for alt
     PRINTSTMT     →  'P' EXP
     RETURNSTMT    →  'R' EXP
     CONDITIONAL   →  'I' EXP BLOCK ('EI' EXP BLOCK)* ('E' BLOCK)?
-    LOOP          →  'LU' EXP BR BLOCK
-                  →  'LF' ID EXP EXP EXP? BR BLOCK
+    LOOP          →  'L' EXP? BR BLOCK
+                  →  'LU' EXP BR BLOCK
+                  →  'LF' ID EXP (EXP EXP?)? BR BLOCK
                   →  'LW' EXP BR BLOCK
     EXP           →  EXP1 ('||' EXP1)*
     EXP1          →  EXP2 ('&&' EXP2)*
