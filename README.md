@@ -213,7 +213,7 @@ Spitfire's arrays are just like any other languages but with some spice. Array d
 
     [N] p = [100, 43, 22, 5, 8]			    var p = [100, 43, 22, 5, 8];
     N n = 78                                var n = 78;
-    p <= n                                  p.push(n);
+    p += n                                  p.push(n);
     P p[-1]					                console.log(p[p.length-1]);
     [N] q = p    					        var q = p;
     [Y] a = [88, false, “0001”, green]		var a = [88, false, “0001”, green]; 
